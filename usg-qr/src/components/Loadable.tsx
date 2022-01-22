@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import Loader from './Loader';
 
 
-const Loadable = (Component:any) => (props:any) =>
+const Loadable = (Component:React.FC) => (props:any) =>
     (
         <Suspense fallback={<Loader />}>
             <Component {...props} />

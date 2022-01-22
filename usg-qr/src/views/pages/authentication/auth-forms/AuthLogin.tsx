@@ -26,7 +26,9 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project imports
-import AnimateButton from '../../../../components/extended/AnimateButton';
+
+// import AnimateButton from './components/extended/AnimateButton';
+import AnimateButton from '../../../../components/extended/AnimateButton'
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
@@ -36,8 +38,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
-    const theme = useTheme();
+    const theme:any = useTheme();
+
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+    const customization = useSelector((state:any) => state.customization);
     const [checked, setChecked] = useState(true);
 
     const googleHandler = async () => {
@@ -70,7 +74,9 @@ const FirebaseLogin = ({ ...others }) => {
                                 borderColor: theme.palette.grey[100]
                             }}
                         >
-                     
+                            <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
+                                {/* <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} /> */}
+                            </Box>
                             Sign in with Google
                         </Button>
                     </AnimateButton>
@@ -94,7 +100,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 borderColor: `${theme.palette.grey[100]} !important`,
                                 color: `${theme.palette.grey[900]}!important`,
                                 fontWeight: 500,
-                                borderRadius: `14px`
+                                borderRadius: `${customization.borderRadius}px`
                             }}
                             disableRipple
                             disabled
@@ -128,7 +134,7 @@ const FirebaseLogin = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} >
+                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
                                 id="outlined-adornment-email-login"
@@ -150,7 +156,7 @@ const FirebaseLogin = ({ ...others }) => {
                         <FormControl
                             fullWidth
                             error={Boolean(touched.password && errors.password)}
-                           
+                            sx={{ ...theme.typography.customInput }}
                         >
                             <InputLabel htmlFor="outlined-adornment-password-login">Password</InputLabel>
                             <OutlinedInput

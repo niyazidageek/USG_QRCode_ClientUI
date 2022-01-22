@@ -7,13 +7,13 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 // project imports
 import AuthWrapper1 from '../AuthWrapper';
 import AuthCardWrapper from '../AuthCardWrapper';
-import AuthLogin from '../auth-forms/AuthLogin';
+import AuthForgotPassword from '../auth-forms/AuthForgotPassword';
 
 // assets
 
 // ================================|| AUTH3 - LOGIN ||================================ //
 
-const Login = () => {
+const ForgotPassword = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -44,7 +44,7 @@ const Login = () => {
                                                         gutterBottom
                                                         variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Hi, Welcome Back
+                                                        Forgot your password?
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
@@ -58,7 +58,7 @@ const Login = () => {
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <AuthLogin />
+                                        <AuthForgotPassword />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Divider />
@@ -88,4 +88,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default ForgotPassword;
