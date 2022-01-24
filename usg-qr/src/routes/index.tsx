@@ -5,9 +5,10 @@ import { store } from '../store';
 // import MainRoutes from './MainRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
 import config from 'config';
+import MainRoutes from './MainRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-    return useRoutes([AuthenticationRoutes]);
+    return useRoutes([AuthenticationRoutes, MainRoutes],"/dashboard");
 }
