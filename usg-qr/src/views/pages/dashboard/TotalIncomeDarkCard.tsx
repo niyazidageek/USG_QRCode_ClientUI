@@ -9,7 +9,7 @@ import MainCard from '../../../components/cards/MainCard';
 import TotalIncomeCard from '../../../components/cards/skeleton/TotalIncomeCard';
 
 // assets
-import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }:any) => ({
@@ -63,7 +63,7 @@ const TotalIncomeDarkCard = ({ isLoading }:any) => {
                                             color: '#fff'
                                         }}
                                     >
-                                        <TableChartOutlinedIcon fontSize="inherit" />
+                                        <LibraryBooksIcon fontSize="inherit" />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -74,12 +74,12 @@ const TotalIncomeDarkCard = ({ isLoading }:any) => {
                                     }}
                                     primary={
                                         <Typography variant="h4" sx={{ color: '#fff' }}>
-                                            $203k
+                                            17
                                         </Typography>
                                     }
                                     secondary={
                                         <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
-                                            Total Income
+                                            Total Books
                                         </Typography>
                                     }
                                 />

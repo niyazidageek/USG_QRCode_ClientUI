@@ -9,18 +9,19 @@ import MainCard from '../../../components/cards/MainCard';
 import TotalIncomeCard from '../../../components/cards/skeleton/TotalIncomeCard';
 
 // assets
-import StorefrontTwoToneIcon from '@mui/icons-material/StorefrontTwoTone';
+import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     overflow: 'hidden',
     position: 'relative',
+    backgroundColor: theme.palette.success.main,
     '&:after': {
         content: '""',
         position: 'absolute',
         width: 210,
         height: 210,
-        background: `linear-gradient(210.04deg, ${theme.palette.warning.dark} -50.94%, rgba(144, 202, 249, 0) 83.49%)`,
+        background: `linear-gradient(210.04deg, ${theme.palette.success.light} -50.94%, rgba(0,255,0,0.39) 83.49%)`,
         borderRadius: '50%',
         top: -30,
         right: -180
@@ -30,7 +31,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
         position: 'absolute',
         width: 210,
         height: 210,
-        background: `linear-gradient(140.9deg, ${theme.palette.warning.dark} -14.02%, rgba(144, 202, 249, 0) 70.50%)`,
+        background: `linear-gradient(140.9deg, ${theme.palette.success.light} -14.02%, rgba(0,255,0,0.39) 70.50%)`,
         borderRadius: '50%',
         top: -160,
         right: -130
@@ -57,11 +58,11 @@ const TotalIncomeLightCard = ({ isLoading }:any) => {
                                         sx={{
                                             ...theme.typography.commonAvatar,
                                             ...theme.typography.largeAvatar,
-                                            backgroundColor: theme.palette.warning.light,
-                                            color: theme.palette.warning.dark
+                                            backgroundColor: theme.palette.success.dark,
+                                            color: "#fff"
                                         }}
                                     >
-                                        <StorefrontTwoToneIcon fontSize="inherit" />
+                                        <MiscellaneousServicesIcon fontSize="inherit" />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -70,16 +71,13 @@ const TotalIncomeLightCard = ({ isLoading }:any) => {
                                         mt: 0.45,
                                         mb: 0.45
                                     }}
-                                    primary={<Typography variant="h4">$203k</Typography>}
+                                    primary={<Typography sx={{ color: '#fff' }} variant="h4">Randomize clients</Typography>}
                                     secondary={
                                         <Typography
                                             variant="subtitle2"
-                                            sx={{
-                                                color: theme.palette.grey[500],
-                                                mt: 0.5
-                                            }}
+                                            sx={{ color: 'primary.light', mt: 0.25 }}
                                         >
-                                            Total Income
+                                            Active Service
                                         </Typography>
                                     }
                                 />

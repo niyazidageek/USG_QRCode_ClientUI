@@ -16,7 +16,7 @@ import ChartDataMonth from './chart-data/total-order-month-line-chart';
 import ChartDataYear from './chart-data/total-order-year-line-chart';
 
 // assets
-import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
+import NewspaperIcon from '@mui/icons-material/Newspaper';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const CardWrapper = styled(MainCard)(({ theme }:any) => ({
@@ -93,7 +93,7 @@ const TotalOrderLineChartCard = ({ isLoading }:any) => {
                                                 mt: 1
                                             }}
                                         >
-                                            <LocalMallOutlinedIcon fontSize="inherit" />
+                                            <NewspaperIcon fontSize="inherit" />
                                         </Avatar>
                                     </Grid>
                                     <Grid item>
@@ -125,26 +125,15 @@ const TotalOrderLineChartCard = ({ isLoading }:any) => {
                                             <Grid item>
                                                 {timeValue ? (
                                                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                        $108
+                                                        12
                                                     </Typography>
                                                 ) : (
                                                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                        $961
+                                                        5
                                                     </Typography>
                                                 )}
                                             </Grid>
-                                            <Grid item>
-                                                <Avatar
-                                                    sx={{
-                                                        ...theme.typography.smallAvatar,
-                                                        cursor: 'pointer',
-                                                        backgroundColor: theme.palette.primary[200],
-                                                        color: theme.palette.primary.dark
-                                                    }}
-                                                >
-                                                    <ArrowDownwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                                                </Avatar>
-                                            </Grid>
+                                           
                                             <Grid item xs={12}>
                                                 <Typography
                                                     sx={{
@@ -153,7 +142,7 @@ const TotalOrderLineChartCard = ({ isLoading }:any) => {
                                                         color: theme.palette.primary[200]
                                                     }}
                                                 >
-                                                    Total Order
+                                                    Total Issues
                                                 </Typography>
                                             </Grid>
                                         </Grid>

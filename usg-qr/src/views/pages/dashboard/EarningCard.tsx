@@ -10,7 +10,7 @@ import MainCard from '../../../components/cards/MainCard';
 import SkeletonEarningCard from '../../../components/cards/skeleton/EarningCard'
 
 // assets
-import EarningIcon from '../../../assets/images/icons/earning.svg';
+import EarningIcon from '../../../assets/images/icons/frame (1).svg';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
@@ -92,7 +92,7 @@ const EarningCard = ({ isLoading }:any) => {
                                             <img src={EarningIcon} alt="Notification" />
                                         </Avatar>
                                     </Grid>
-                                    <Grid item>
+                                    {/* <Grid item>
                                         <Avatar
                                             variant="rounded"
                                             sx={{
@@ -137,27 +137,18 @@ const EarningCard = ({ isLoading }:any) => {
                                                 <ArchiveTwoToneIcon sx={{ mr: 1.75 }} /> Archive File
                                             </MenuItem>
                                         </Menu>
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             </Grid>
                             <Grid item>
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            $500.00
+                                            24
                                         </Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Avatar
-                                            sx={{
-                                                cursor: 'pointer',
-                                                ...theme.typography.smallAvatar,
-                                                backgroundColor: theme.palette.secondary[200],
-                                                color: theme.palette.secondary.dark
-                                            }}
-                                        >
-                                            <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                                        </Avatar>
+                                       
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -169,7 +160,7 @@ const EarningCard = ({ isLoading }:any) => {
                                         color: theme.palette.secondary[200]
                                     }}
                                 >
-                                    Total Earning
+                                    Total Scans
                                 </Typography>
                             </Grid>
                         </Grid>
