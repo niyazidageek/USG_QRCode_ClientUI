@@ -37,13 +37,11 @@ const Sidebar = ({ drawerOpen, drawerToggle, window }:any) => {
                     }}
                 >
                     <MenuList />
-                    <MenuCard />
                 </PerfectScrollbar>
             </BrowserView>
             <MobileView>
                 <Box sx={{ px: 2 }}>
                     <MenuList />
-                    <MenuCard />
                 </Box>
             </MobileView>
         </>

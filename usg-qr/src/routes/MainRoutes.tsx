@@ -7,9 +7,12 @@ import Loadable from '../components/Loadable';
 // dashboard routing
 
 const Dashboard = Loadable(lazy(() => import('../views/pages/dashboard')));
+const Settings = Loadable(lazy(() => import('../views/pages/settings')));
+const Services = Loadable(lazy(() => import('../views/pages/services')));
+const Books = Loadable(lazy(() => import('../views/pages/books')));
+const Issues = Loadable(lazy(() => import('../views/pages/issues')));
 
 
-// ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
     path: '/',
@@ -22,6 +25,22 @@ const MainRoutes = {
         {
             path: 'dashboard',
             element: <Dashboard />
+        },
+        {
+            path: 'settings',
+            element: <Settings />
+        },
+        {
+            path: 'services',
+            element: <Services />
+        },
+        {
+            path: 'books',
+            element: <Books />
+        },
+        {
+            path: 'issues',
+            element: <Issues />
         }
     ]
 };
