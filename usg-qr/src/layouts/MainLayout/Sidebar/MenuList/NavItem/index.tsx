@@ -8,7 +8,6 @@ import { useTheme } from '@mui/material/styles';
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
 
 import { MENU_OPEN, SET_MENU } from '../../../../../store/actions';
-import config from '../../../../../config';
 
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -40,7 +39,7 @@ const NavItem = ({ item, level }:any) => {
     }
 
     let listItemProps:any = {
-        component: forwardRef((props, ref:any) => <Link ref={ref} {...props} to={`${config.basename}${item.url}`} target={itemTarget} />)
+        component: forwardRef((props, ref:any) => <Link ref={ref} {...props} to={`${item.url}`} target={itemTarget} />)
     };
     if (item?.external) {
         listItemProps = { component: 'a', href: item.url, target: itemTarget };

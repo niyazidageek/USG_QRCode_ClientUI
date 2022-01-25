@@ -4,11 +4,10 @@ import { store } from '../store';
 // routes
 // import MainRoutes from './MainRoutes';
 import AuthenticationRoutes from './AuthenticationRoutes';
-import config from 'config';
 import MainRoutes from './MainRoutes';
 
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-    return useRoutes([AuthenticationRoutes, MainRoutes], "");
+    return useRoutes([AuthenticationRoutes, MainRoutes]);
 }
