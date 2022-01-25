@@ -12,15 +12,15 @@ const ForgotPassword = Loadable(lazy(() => import('../views/pages/authentication
 
 
 const AuthenticationRoutes = {
-    path: '/',
+    path: '/auth',
     element: <AuthenticationLayout />,
     children: [
         {
-            path: '/login',
+            path: 'login',
             element: <Login />
         },
         {
-            path: '/forgotpassword',
+            path: 'forgotpassword',
             element: <ForgotPassword />
         }
     ]

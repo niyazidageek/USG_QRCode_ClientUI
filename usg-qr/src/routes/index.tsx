@@ -10,5 +10,5 @@ import MainRoutes from './MainRoutes';
 // ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-    return useRoutes([AuthenticationRoutes, MainRoutes],"/dashboard");
+    return useRoutes([AuthenticationRoutes, MainRoutes], "");
 }

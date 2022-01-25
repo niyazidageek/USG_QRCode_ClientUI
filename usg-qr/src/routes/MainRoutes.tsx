@@ -20,7 +20,7 @@ const MainRoutes = {
             element: <Dashboard />
         },
         {
-            path: '/dashboard',
+            path: 'dashboard',
             element: <Dashboard />
         }
     ]
