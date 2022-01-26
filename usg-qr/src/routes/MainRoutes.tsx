@@ -11,6 +11,7 @@ const Settings = Loadable(lazy(() => import('../views/pages/settings')));
 const Services = Loadable(lazy(() => import('../views/pages/services')));
 const Books = Loadable(lazy(() => import('../views/pages/books')));
 const Issues = Loadable(lazy(() => import('../views/pages/issues')));
+const Clients = Loadable(lazy(() => import('../views/pages/clients')));
 
 
 
@@ -41,6 +42,10 @@ const MainRoutes = {
         {
             path: 'issues',
             element: <Issues />
+        },
+        {
+            path: 'clients',
+            element: <Clients />
         }
     ]
 };

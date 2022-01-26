@@ -1,10 +1,10 @@
 // assets
 import HomeRepairServiceOutlinedIcon from '@mui/icons-material/HomeRepairServiceOutlined';
-import { IconHome, IconSettings,IconWindmill } from '@tabler/icons';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 // constant
 const icons = {
@@ -12,7 +12,8 @@ const icons = {
     SettingsOutlinedIcon,
     HomeRepairServiceOutlinedIcon,
     LibraryBooksOutlinedIcon,
-    NewspaperOutlinedIcon
+    NewspaperOutlinedIcon,
+    PeopleAltOutlinedIcon
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -60,6 +61,14 @@ const navigation = {
             type: 'item',
             url: '/issues',
             icon: icons.NewspaperOutlinedIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'clients-page',
+            title: 'Clients',
+            type: 'item',
+            url: '/clients',
+            icon: icons.PeopleAltOutlinedIcon,
             breadcrumbs: false
         }
     ]
