@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import { green } from "@mui/material/colors";
 // import SearchBar from "material-ui-search-bar";
 import SearchSection from "../../../../layouts/MainLayout/Header/SearchSection";
+import BookModal from "../book-modal";
 
 const columns: any = [
   { id: "Name", label: "Name", minWidth: 170 },
@@ -66,13 +67,7 @@ export default function ServicesTable() {
                 <SearchSection />
               </TableCell>
               <TableCell align='right' colSpan={2}>
-                <Button
-                  variant="contained"
-                  color={"success"}
-                  style={{ color: "white", fontWeight: "bold" }}
-                >
-                  Create
-                </Button>
+               <BookModal />
               </TableCell>
             </TableRow>
             <TableRow>
@@ -93,16 +88,6 @@ export default function ServicesTable() {
               .map((row: any) => {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    {columns.map((column: any) => {
-                      // const value = row[column.id];
-                      // return (
-                      //   <TableCell key={column.id} align={column.align}>
-                      //     {column.format && typeof value === "number"
-                      //       ? column.format(value)
-                      //       : value}
-                      //   </TableCell>
-                      // );
-                    })}
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.isActive}</TableCell>
                     <TableCell>

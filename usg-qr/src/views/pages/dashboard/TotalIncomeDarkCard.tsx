@@ -10,6 +10,9 @@ import TotalIncomeCard from '../../../components/cards/skeleton/TotalIncomeCard'
 
 // assets
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import { useGetData } from '../../../hooks/useGetData';
+import { BOOKSCOUNT } from '../../../store/queryKeys';
+import { getBooksCount } from '../../../services/bookService';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }:any) => ({
@@ -41,12 +44,13 @@ const CardWrapper = styled(MainCard)(({ theme }:any) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const TotalIncomeDarkCard = ({ isLoading }:any) => {
+const TotalIncomeDarkCard = () => {
     const theme:any = useTheme();
+    const {isLoading, data, isError, error, isFetching, refetch} = useGetData(BOOKSCOUNT, getBooksCount);
 
     return (
         <>
-            {isLoading ? (
+            {isLoading||isError ? (
                 <TotalIncomeCard />
             ) : (
                 <CardWrapper border={false} content={false}>
@@ -74,7 +78,7 @@ const TotalIncomeDarkCard = ({ isLoading }:any) => {
                                     }}
                                     primary={
                                         <Typography variant="h4" sx={{ color: '#fff' }}>
-                                            17
+                                            {data}
                                         </Typography>
                                     }
                                     secondary={
@@ -90,10 +94,6 @@ const TotalIncomeDarkCard = ({ isLoading }:any) => {
             )}
         </>
     );
-};
-
-TotalIncomeDarkCard.propTypes = {
-    isLoading: PropTypes.bool
 };
 
 export default TotalIncomeDarkCard;

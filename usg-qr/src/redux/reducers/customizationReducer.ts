@@ -1,38 +1,34 @@
-// project imports
-import config from '../config';
-
-// action - state management
-import * as actionTypes from './actions';
+import config from '../../config';
+import { MENU_OPEN, SET_BORDER_RADIUS, SET_FONT_FAMILY, SET_MENU } from '../actions/consts';
 
 export const initialState = {
-    isOpen: [], // for active default menu
+    isOpen: [],
     fontFamily: config.fontFamily,
     borderRadius: config.borderRadius,
     opened: true
 };
 
-// ==============================|| CUSTOMIZATION REDUCER ||============================== //
 
 const customizationReducer = (state = initialState, action:any) => {
     let id;
     switch (action.type) {
-        case actionTypes.MENU_OPEN:
+        case MENU_OPEN:
             id = action.id;
             return {
                 ...state,
                 isOpen: [id]
             };
-        case actionTypes.SET_MENU:
+        case SET_MENU:
             return {
                 ...state,
                 opened: action.opened
             };
-        case actionTypes.SET_FONT_FAMILY:
+        case SET_FONT_FAMILY:
             return {
                 ...state,
                 fontFamily: action.fontFamily
             };
-        case actionTypes.SET_BORDER_RADIUS:
+        case SET_BORDER_RADIUS:
             return {
                 ...state,
                 borderRadius: action.borderRadius

@@ -12,7 +12,7 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import navigation from '../../menu-items';
 import { drawerWidth } from '../../store/constants';
-import { SET_MENU } from '../../store/actions';
+import { SET_MENU } from '../../redux/actions/consts';
 
 // assets
 import { IconChevronRight } from '@tabler/icons';
@@ -67,7 +67,7 @@ const MainLayout = () => {
     const matchDownMd = useMediaQuery(theme.breakpoints.down('lg'));
 
     // Handle left drawer
-    const leftDrawerOpened = useSelector((state) => state.customization.opened);
+    const leftDrawerOpened = useSelector((state) => state.customizationReducer.opened);
     const dispatch = useDispatch();
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_MENU, opened: !leftDrawerOpened });

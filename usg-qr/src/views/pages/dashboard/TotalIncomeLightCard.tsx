@@ -10,6 +10,9 @@ import TotalIncomeCard from '../../../components/cards/skeleton/TotalIncomeCard'
 
 // assets
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
+import { ACTIVESERVICE, SERVICES } from '../../../store/queryKeys';
+import { getActiveService } from '../../../services/endpointService';
+import { useGetData } from '../../../hooks/useGetData';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({
@@ -40,12 +43,13 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME LIGHT CARD ||============================== //
 
-const TotalIncomeLightCard = ({ isLoading }:any) => {
+const TotalIncomeLightCard = () => {
     const theme:any = useTheme();
+    const {isLoading, data, isError, error, isFetching, refetch} = useGetData(ACTIVESERVICE, getActiveService);
 
     return (
         <>
-            {isLoading ? (
+            {isLoading || isError ? (
                 <TotalIncomeCard />
             ) : (
                 <CardWrapper border={false} content={false}>
@@ -71,7 +75,7 @@ const TotalIncomeLightCard = ({ isLoading }:any) => {
                                         mt: 0.45,
                                         mb: 0.45
                                     }}
-                                    primary={<Typography sx={{ color: '#fff' }} variant="h4">Randomize clients</Typography>}
+                                    primary={<Typography sx={{ color: '#fff' }} variant="h4">{data.description}</Typography>}
                                     secondary={
                                         <Typography
                                             variant="subtitle2"

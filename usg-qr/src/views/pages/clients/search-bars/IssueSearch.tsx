@@ -4,6 +4,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
 import Box from '@mui/material/Box';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 interface Film {
   title: string;
@@ -29,7 +30,7 @@ export default function IssueSearch() {
     }
 
     (async () => {
-      await sleep(1e3); // For demo purposes.
+      await sleep(1e3);
 
       if (active) {
         setOptions([...topFilms]);
@@ -48,10 +49,10 @@ export default function IssueSearch() {
   }, [open]);
 
   return (
-    <Box display={'flex'}>
+    <Box display={'flex'} alignItems={'center'} justifyContent={'flex-end'}>
       <Autocomplete
         id="asynchronous-demo"
-        sx={{ width: 300 }}
+        sx={{ width: 300, display:'inline-block'}}
         open={open}
         onOpen={() => {
           setOpen(true);
@@ -81,18 +82,18 @@ export default function IssueSearch() {
           />
         )}
       />
+      <ArrowRightAltIcon fontSize="large" />
       <Button
         variant="contained"
         color={"primary"}
-        style={{ color: "white", fontWeight: "bold", marginLeft:'1rem' }}
+        style={{ color: "white", fontWeight: "bold" }}
       >
         Randomize
       </Button>
-    </Box>
+      </Box>
   );
 }
 
-// Top films as rated by IMDb users. http://www.imdb.com/chart/top
 const topFilms = [
   { title: "The Shawshank Redemption", year: 1994 },
   { title: "The Godfather", year: 1972 },

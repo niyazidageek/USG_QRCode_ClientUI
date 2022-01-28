@@ -1,13 +1,22 @@
-import { useRoutes } from 'react-router-dom';
+import { useNavigate, useRoutes } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from '../store';
-// routes
-// import MainRoutes from './MainRoutes';
+import { useSelector } from "react-redux";
 import AuthenticationRoutes from './AuthenticationRoutes';
 import MainRoutes from './MainRoutes';
+import { useEffect } from 'react';
+import { useValidateToken } from '../hooks/useValidateToken';
+import { roles } from '../store/roles';
+import { useAuthorize } from '../hooks/useAuthorize';
 
-// ==============================|| ROUTING RENDER ||============================== //
 
 export default function ThemeRoutes() {
-    return useRoutes([AuthenticationRoutes, MainRoutes]);
+    const navigate = useNavigate();
+    const isLoggedIn = useSelector(
+        (state:any) => state.authReducer.isLoggedIn && state.authReducer.jwt !== null
+      );
+    useValidateToken();
+
+    const isAuthorizedMain = useAuthorize([roles.Admin, roles.Member])
+
+    return useRoutes([AuthenticationRoutes(isLoggedIn), MainRoutes(isLoggedIn, isAuthorizedMain, navigate)]);
 }

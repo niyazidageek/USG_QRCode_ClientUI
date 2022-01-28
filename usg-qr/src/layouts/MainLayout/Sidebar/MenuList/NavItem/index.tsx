@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
 
-import { MENU_OPEN, SET_MENU } from '../../../../../store/actions';
+import { MENU_OPEN, SET_MENU } from '../../../../../redux/actions/consts';
 
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
@@ -17,7 +17,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 const NavItem = ({ item, level }:any) => {
     const theme:any = useTheme();
     const dispatch = useDispatch();
-    const customization = useSelector((state:any) => state.customization);
+    const customization = useSelector((state:any) => state.customizationReducer);
     const matchesSM = useMediaQuery(theme.breakpoints.down('lg'));
 
     const Icon = item.icon;

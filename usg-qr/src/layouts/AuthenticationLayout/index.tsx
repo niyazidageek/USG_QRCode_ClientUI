@@ -1,11 +1,8 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet,Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-// project imports
-
-// ==============================|| MINIMAL LAYOUT ||============================== //
-
-const MinimalLayout = () => (
-        <Outlet />
-);
+const MinimalLayout = () => {
+  return <Outlet />;
+};
 
 export default MinimalLayout;

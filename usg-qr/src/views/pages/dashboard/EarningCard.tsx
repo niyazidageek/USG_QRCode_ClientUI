@@ -17,6 +17,9 @@ import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
 import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
 import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
+import { SCANSCOUNT } from '../../../store/queryKeys';
+import { getScansCount } from '../../../services/scanService';
+import { useGetData } from '../../../hooks/useGetData';
 
 const CardWrapper = styled(MainCard)(({ theme }:any) => ({
     backgroundColor: theme.palette.secondary.dark,
@@ -56,7 +59,7 @@ const CardWrapper = styled(MainCard)(({ theme }:any) => ({
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const EarningCard = ({ isLoading }:any) => {
+const EarningCard = () => {
     const theme:any = useTheme();
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -69,9 +72,11 @@ const EarningCard = ({ isLoading }:any) => {
         setAnchorEl(null);
     };
 
+    const {isLoading, data, isError, error, isFetching, refetch} = useGetData(SCANSCOUNT, getScansCount);
+
     return (
         <>
-            {isLoading ? (
+            {isLoading || isError ? (
                 <SkeletonEarningCard />
             ) : (
                 <CardWrapper border={false} content={false}>
@@ -92,59 +97,13 @@ const EarningCard = ({ isLoading }:any) => {
                                             <img src={EarningIcon} alt="Notification" />
                                         </Avatar>
                                     </Grid>
-                                    {/* <Grid item>
-                                        <Avatar
-                                            variant="rounded"
-                                            sx={{
-                                                ...theme.typography.commonAvatar,
-                                                ...theme.typography.mediumAvatar,
-                                                backgroundColor: theme.palette.secondary.dark,
-                                                color: theme.palette.secondary[200],
-                                                zIndex: 1
-                                            }}
-                                            aria-controls="menu-earning-card"
-                                            aria-haspopup="true"
-                                            onClick={handleClick}
-                                        >
-                                            <MoreHorizIcon fontSize="inherit" />
-                                        </Avatar>
-                                        <Menu
-                                            id="menu-earning-card"
-                                            anchorEl={anchorEl}
-                                            keepMounted
-                                            open={Boolean(anchorEl)}
-                                            onClose={handleClose}
-                                            variant="selectedMenu"
-                                            anchorOrigin={{
-                                                vertical: 'bottom',
-                                                horizontal: 'right'
-                                            }}
-                                            transformOrigin={{
-                                                vertical: 'top',
-                                                horizontal: 'right'
-                                            }}
-                                        >
-                                            <MenuItem onClick={handleClose}>
-                                                <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Card
-                                            </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <FileCopyTwoToneIcon sx={{ mr: 1.75 }} /> Copy Data
-                                            </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <PictureAsPdfTwoToneIcon sx={{ mr: 1.75 }} /> Export
-                                            </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <ArchiveTwoToneIcon sx={{ mr: 1.75 }} /> Archive File
-                                            </MenuItem>
-                                        </Menu>
-                                    </Grid> */}
                                 </Grid>
                             </Grid>
                             <Grid item>
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            24
+                                            {data}
                                         </Typography>
                                     </Grid>
                                     <Grid item>

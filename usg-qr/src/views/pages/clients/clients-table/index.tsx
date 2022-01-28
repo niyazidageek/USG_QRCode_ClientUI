@@ -65,29 +65,20 @@ export default function ClientsTable() {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell colSpan={3}>
+              <TableCell colSpan={5}>
                 <SearchSection />
               </TableCell>
-              <TableCell>
+              <TableCell colSpan={4} align="right">
                 <IssueSearch />
-              </TableCell>
-              <TableCell align="right" colSpan={4}>
-                <Button
-                  variant="contained"
-                  color={"success"}
-                  style={{ color: "white", fontWeight: "bold" }}
-                >
-                  Create
-                </Button>
               </TableCell>
             </TableRow>
             <TableRow>
               {columns.map((column: any) => (
                 <TableCell
-                  colSpan={3}
+                  colSpan={4}
                   key={column.id}
                   align={column.align}
-                  style={{ top: 57, width: "50%" }}
+                  style={{ top: 57, width: "100%" }}
                 >
                   {column.label}
                 </TableCell>
@@ -98,9 +89,9 @@ export default function ClientsTable() {
             {rows.map((row: any) => {
               return (
                 <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  <TableCell>{row.id}</TableCell>
-                  <TableCell colSpan={3}>{row.email}</TableCell>
-                  <TableCell colSpan={3}>
+                  <TableCell colSpan={3}>{row.id}</TableCell>
+                  <TableCell colSpan={4}>{row.email}</TableCell>
+                  <TableCell colSpan={4}>
                     <Button
                       variant="contained"
                       color={"error"}

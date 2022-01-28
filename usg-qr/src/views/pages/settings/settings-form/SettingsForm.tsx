@@ -7,65 +7,35 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-
 import SubCard from "../../../../components/cards/SubCard";
+import { useGetData } from "../../../../hooks/useGetData";
+import {
+  ACTIVEBOOK,
+  ACTIVEISSUE,
+  ISSUES,
+  SERVICES,
+} from "../../../../store/queryKeys";
+import { getServices } from "../../../../services/endpointService";
+import Card from "../../../../components/cards/skeleton/Card";
+import { useQueries } from "react-query";
+import { getActiveIssue } from "../../../../services/issueService";
+import { getActiveBook } from "../../../../services/bookService";
+import ServiceOptions from "./ServiceOptions";
+import BookOptions from "./BookOptions";
+import IssueOptions from "./IssueOptions";
 
 export default function SettingsForm() {
+
   return (
     <>
       <Grid item xs={12} sm={6}>
-        <SubCard title="Active Service">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Service</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              //   value={age}
-              label="Service"
-              //   onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </SubCard>
+        <ServiceOptions />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <SubCard title="Active Book">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Book</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              //   value={age}
-              label="Book"
-              //   onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </SubCard>
+        <BookOptions />
       </Grid>
       <Grid item xs={12} sm={6}>
-        <SubCard title="Active Issue">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Issue</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              //   value={age}
-              label="Issue"
-              //   onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </SubCard>
+        <IssueOptions />
       </Grid>
     </>
   );

@@ -18,6 +18,9 @@ import ChartDataYear from './chart-data/total-order-year-line-chart';
 // assets
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { ISSUESCOUNT } from '../../../store/queryKeys';
+import { getIssuesCount } from '../../../services/issueService';
+import { useGetData } from '../../../hooks/useGetData';
 
 const CardWrapper = styled(MainCard)(({ theme }:any) => ({
     backgroundColor: theme.palette.primary.dark,
@@ -63,7 +66,7 @@ const CardWrapper = styled(MainCard)(({ theme }:any) => ({
 
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
 
-const TotalOrderLineChartCard = ({ isLoading }:any) => {
+const TotalOrderLineChartCard = () => {
     const theme:any = useTheme();
     const ChartDataMonthA:any = ChartDataMonth;
     const ChartDataYearA:any = ChartDataYear;
@@ -71,10 +74,10 @@ const TotalOrderLineChartCard = ({ isLoading }:any) => {
     const handleChangeTime = (event:any, newValue:any) => {
         setTimeValue(newValue);
     };
-
+    const {isLoading, data, isError, error, isFetching, refetch} = useGetData(ISSUESCOUNT, getIssuesCount);
     return (
         <>
-            {isLoading ? (
+            {isLoading||isError ? (
                 <SkeletonTotalOrderCard />
             ) : (
                 <CardWrapper border={false} content={false}>

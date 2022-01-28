@@ -5,6 +5,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
 // constant
 const icons = {
@@ -13,7 +14,8 @@ const icons = {
     HomeRepairServiceOutlinedIcon,
     LibraryBooksOutlinedIcon,
     NewspaperOutlinedIcon,
-    PeopleAltOutlinedIcon
+    PeopleAltOutlinedIcon,
+    PermIdentityIcon
 };
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
@@ -69,6 +71,14 @@ const navigation = {
             type: 'item',
             url: '/clients',
             icon: icons.PeopleAltOutlinedIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'profile-page',
+            title: 'Profile',
+            type: 'item',
+            url: '/profile',
+            icon: icons.PermIdentityIcon,
             breadcrumbs: false
         }
     ]
