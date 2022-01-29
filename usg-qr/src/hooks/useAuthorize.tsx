@@ -15,7 +15,6 @@ export function useAuthorize(validRoles: any) {
           });
           return check;
         });
-
         setIsAuthorized(authorized);
       }
     }

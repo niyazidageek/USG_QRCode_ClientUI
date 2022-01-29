@@ -13,12 +13,12 @@ import { green } from "@mui/material/colors";
 // import SearchBar from "material-ui-search-bar";
 import SearchSection from "../../../../layouts/MainLayout/Header/SearchSection";
 import BookModal from "../book-modal";
+import { useNavigate } from "react-router-dom";
 
 const columns: any = [
-  { id: "Name", label: "Name", minWidth: 170 },
+  { id: "Name", label: "Name", minWidth: 100 },
   { id: "isActive", label: "Status", minWidth: 100 },
-  { id: "edit", label: "Edit", minWidth: 100 },
-  { id: "delete", label: "Delete", minWidth: 100 },
+  { id: "view", label: "View", minWidth: 100 },
 ];
 
 function createData(name: any, isActive: any) {
@@ -31,25 +31,13 @@ const originalRows = [
 ];
 
 export default function ServicesTable() {
+  const navigate = useNavigate();
   const [page, setPage]: any = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(10);
   const [rows, setRows] = React.useState(originalRows);
-  const [searched, setSearched] = React.useState<string>("");
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
-  };
-
-  const requestSearch = (searchedVal: string) => {
-    const filteredRows = originalRows.filter((row) => {
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase());
-    });
-    setRows(filteredRows);
-  };
-
-  const cancelSearch = () => {
-    setSearched("");
-    requestSearch(searched);
   };
 
   const handleChangeRowsPerPage = (event: any) => {
@@ -66,7 +54,7 @@ export default function ServicesTable() {
               <TableCell colSpan={2}>
                 <SearchSection />
               </TableCell>
-              <TableCell align='right' colSpan={2}>
+              <TableCell align='right' colSpan={3}>
                <BookModal />
               </TableCell>
             </TableRow>
@@ -91,22 +79,14 @@ export default function ServicesTable() {
                     <TableCell>{row.name}</TableCell>
                     <TableCell>{row.isActive}</TableCell>
                     <TableCell>
-                      <Button
-                        variant="contained"
-                        color={"warning"}
-                        style={{ color: "white", fontWeight: "bold" }}
-                      >
-                        Edit
-                      </Button>
-                    </TableCell>
-                    <TableCell>
                       {" "}
                       <Button
                         variant="contained"
-                        color={'error'}
+                        color={'primary'}
+                        onClick={()=>navigate(`/books/${1004}`)}
                         style={{ color: "white", fontWeight: "bold" }}
                       >
-                        Delete
+                        View
                       </Button>
                     </TableCell>
                   </TableRow>

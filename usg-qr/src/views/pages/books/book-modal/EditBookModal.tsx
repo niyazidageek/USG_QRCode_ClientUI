@@ -13,13 +13,13 @@ import { useFormik } from "formik";
 import { createContext } from "react";
 import { bookSchema } from "../../../../validations/bookSchema";
 import { useMutation, useQueryClient } from "react-query";
-import { createBook, editBook } from "../../../../services/bookService";
+import { editBook } from "../../../../services/bookService";
 import MuiAlert from "@mui/material/Alert";
 import SaveIcon from "@mui/icons-material/Save";
 import { Snackbar } from "@mui/material";
 import { BOOKS } from "../../../../store/queryKeys";
 
-export default function AddBookModal() {
+export default function EditBookModal({ bookId, book }: any) {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
@@ -27,13 +27,12 @@ export default function AddBookModal() {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
-    createBook,
+    (data: any) => editBook(bookId, data),
     {
       onSuccess: (data: any) => {
         setMessage(data.data.message);
         setToastOpen(true);
-        queryClient.invalidateQueries([BOOKS]);
-        setOpen(false);
+        queryClient.invalidateQueries([BOOKS, bookId]);
       },
       onError: (err: any) => {
         setToastOpen(true);
@@ -43,10 +42,11 @@ export default function AddBookModal() {
   );
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name:"",
-      description: "",
-      url: "",
+      name: book.name,
+      description: book.description,
+      url: book.url,
     },
     validationSchema: bookSchema,
     onSubmit: (values) => {
@@ -77,15 +77,15 @@ export default function AddBookModal() {
       </Snackbar>
       <Button
         variant="contained"
-        color={"success"}
+        color={"warning"}
         style={{ color: "white", fontWeight: "bold" }}
         onClick={handleClickOpen}
       >
-        Add
+        Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          <Typography fontSize={"1rem"}>Add a book</Typography>
+          <Typography fontSize={"1rem"}>Edit the book</Typography>
         </DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
@@ -149,7 +149,7 @@ export default function AddBookModal() {
               type="submit"
             >
               <Typography fontSize={"1rem"} color={"primary"}>
-                Add
+                Save
               </Typography>
             </LoadingButton>
           </DialogActions>
