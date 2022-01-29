@@ -14,6 +14,7 @@ export default function ThemeRoutes() {
     const isLoggedIn = useSelector(
         (state:any) => state.authReducer.isLoggedIn && state.authReducer.jwt !== null
       );
+      
     useValidateToken();
 
     const isAuthorizedMain = useAuthorize([roles.Admin, roles.Member])

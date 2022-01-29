@@ -9,7 +9,7 @@ const initialState = {
   name: null,
   surname: null,
   email: null,
-  roles: [],
+  roles: null,
 };
 
 const authReducer = (state = initialState, action:any) => {
