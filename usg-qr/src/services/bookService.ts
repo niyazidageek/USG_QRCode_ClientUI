@@ -21,7 +21,7 @@ export const getActiveBook = () => {
   return httpClient.get("book/activebook");
 };
 
-export const getBooks = (id: any, page: any = 0, size: any = 3) => {
+export const getBooks = (page: any = 0, size: any = 3) => {
   return httpClient.get(`book/books?page=${page}&size=${size}`);
 };
 

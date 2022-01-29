@@ -26,7 +26,8 @@ function createData(name: any, isActive: any, date:any) {
   return { name, isActive, date };
 }
 
-const originalRows = [
+
+const rows = [
   createData("Issue about someone", "Active", "12 January"),
   createData("Issue about her", "Not active", "24 January"),
 ];
@@ -34,24 +35,12 @@ const originalRows = [
 export default function IssuesTable() {
   const [page, setPage]: any = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(10);
-  const [rows, setRows] = React.useState(originalRows);
   const [searched, setSearched] = React.useState<string>("");
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
 
-  const requestSearch = (searchedVal: string) => {
-    const filteredRows = originalRows.filter((row) => {
-      return row.name.toLowerCase().includes(searchedVal.toLowerCase());
-    });
-    setRows(filteredRows);
-  };
-
-  const cancelSearch = () => {
-    setSearched("");
-    requestSearch(searched);
-  };
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(+event.target.value);
