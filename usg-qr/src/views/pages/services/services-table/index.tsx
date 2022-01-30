@@ -5,6 +5,9 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import { TableRow as RowSkeleton } from "../../../../components/cards/skeleton/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Button from "@mui/material/Button";
@@ -13,9 +16,16 @@ import { green } from "@mui/material/colors";
 import Collapse from "@mui/material/Collapse";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import SearchSection from "../../../../layouts/MainLayout/Header/SearchSection";
+import SearchSection from "../service-search";
 import ServiceModal from "../service-modal";
 import IconButton from "@mui/material/IconButton";
+import { useLocation, useNavigate } from "react-router-dom";
+import { isInteger } from "formik";
+import { useQuery } from "react-query";
+import { SERVICES } from "../../../../store/queryKeys";
+import { getServices } from "../../../../services/endpointService";
+import EditServiceModal from "../service-modal/EditServiceModal";
+import DeleteAlert from "../service-modal/DeleteAlert";
 
 const columns: any = [
   { id: "description", label: "Description", minWidth: 170 },
@@ -24,28 +34,14 @@ const columns: any = [
   { id: "delete", label: "Delete", minWidth: 100 },
 ];
 
-function createData(description: any, isActive: any, url:any) {
-  return { description, isActive, url };
-}
-
-const originalRows = [
-  createData("Service for randomizing cleints", "Active", "https://codesandbox.io/s/niuhb?file=/demo.js:1932-2000"),
-  createData("Service for sending e-books", "Active", "https://codesandbox.io/s/niuhb?file=/demo.js:1932-2000"),
-];
-
 function Row(props: any) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
 
   return (
     <>
-    <TableRow
-      hover
-      role="checkbox"
-      tabIndex={-1}
-      key={row.code}
-    >
-      <TableCell>
+      <TableRow hover role="checkbox" tabIndex={-1}>
+        <TableCell>
           <IconButton
             aria-label="expand row"
             size="small"
@@ -54,85 +50,124 @@ function Row(props: any) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-      <TableCell>{row.description}</TableCell>
-      <TableCell>{row.isActive}</TableCell>
-      <TableCell>
-        <Button
-          variant="contained"
-          color={"warning"}
-          style={{ color: "white", fontWeight: "bold" }}
-        >
-          Edit
-        </Button>
-      </TableCell>
-      <TableCell>
-        <Button
-          variant="contained"
-          color={"error"}
-          style={{ color: "white", fontWeight: "bold" }}
-        >
-          Delete
-        </Button>
-      </TableCell>
-    </TableRow>
-    <TableRow>
-    <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-    <Collapse in={open} timeout="auto" unmountOnExit>
-      <Typography>
-        <h1>
-          URL: {row.url}
-        </h1>
-      </Typography>
-    </Collapse>
-    </TableCell>
-    </TableRow>
+        <TableCell>{row.description}</TableCell>
+        <TableCell>
+          <Typography
+            lineHeight={"normal"}
+            fontWeight={"bold"}
+            color={row.isActive ? "green" : "red"}
+            alignItems={"center"}
+            display={"flex"}
+          >
+            {row.isActive ? "Active" : "Not active"}
+            {row.isActive ? (
+              <CheckIcon
+                style={{
+                  marginLeft: "0.1rem",
+                  fontWeight: "lighter",
+                }}
+              />
+            ) : (
+              <CloseIcon
+                style={{
+                  marginLeft: "0.1rem",
+                  fontWeight: "lighter",
+                }}
+              />
+            )}
+          </Typography>
+        </TableCell>
+        <TableCell>
+         <EditServiceModal serviceId={row.id} service={row}/>
+        </TableCell>
+        <TableCell>
+          <DeleteAlert serviceId={row.id}/>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Typography>
+              <h1>Url: {row.url}</h1>
+            </Typography>
+          </Collapse>
+        </TableCell>
+      </TableRow>
     </>
   );
 }
 
 export default function ServicesTable() {
-  const [page, setPage]: any = React.useState(0);
-  const [rowsPerPage, setRowsPerPage]: any = React.useState(10);
-  const [rows, setRows] = React.useState(originalRows);
-  const [searched, setSearched] = React.useState<string>("");
-  const [open, setOpen] = React.useState(false);
+  const { search } = useLocation();
+  // const [rows, setRows]: any = React.useState(null);
+  const searchParams = new URLSearchParams(search);
+  const queryPage: any = searchParams.get("page");
+  // const [loadingSearch, setLoadingSearch] = React.useState(false);
+  const navigate = useNavigate();
+  const [page, setPage]: any = React.useState(
+    isInteger(queryPage) ? parseInt(queryPage) : 0
+  );
+  const [totalCount, setTotalCount] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
+  // const [cancel, setCancel]: any = React.useState(false);
+
+  const { isLoading, data, isError, error, isFetching, refetch, status } =
+    useQuery([SERVICES, page, rowsPerPage], () =>
+      getServices(page, rowsPerPage)
+    );
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
+    navigate(`?page=${newPage}`);
   };
 
-  const requestSearch = (searchedVal: string) => {
-    const filteredRows = originalRows.filter((row) => {
-      return row.description.toLowerCase().includes(searchedVal.toLowerCase());
-    });
-    setRows(filteredRows);
-  };
-
-  const cancelSearch = () => {
-    setSearched("");
-    requestSearch(searched);
-  };
+  // React.useEffect(() => {
+  //   if (cancel) {
+  //     setPage(0);
+  //     setCancel(false);
+  //   }
+  // }, [cancel]);
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
+  React.useEffect(() => {
+    if (data?.headers["count"]) {
+      setTotalCount(data?.headers["count"]);
+    }
+  }, [data]);
+
+  // React.useEffect(() => {
+  //   console.log(rows);
+  // }, [rows]);
+
+  // React.useEffect(() => {
+  //   if (!isFetching) {
+  //     setRows(data.data);
+  //   }
+  // }, [isFetching]);
+
   return (
     <Paper sx={{ width: "100%" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer sx={{ vh:'100%' }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell colSpan={3}>
-                <SearchSection />
+                {/* <SearchSection
+                  setRows={setRows}
+                  setCancel={setCancel}
+                  setLoadingSearch={setLoadingSearch}
+                /> */}
               </TableCell>
-              <TableCell align="right" colSpan={2}>
+              <TableCell align="right" colSpan={4}>
                 <ServiceModal />
               </TableCell>
             </TableRow>
             <TableRow>
-            <TableCell />
+              <TableCell />
               {columns.map((column: any) => (
                 <TableCell
                   key={column.id}
@@ -145,20 +180,30 @@ export default function ServicesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row: any) => {
+            {isLoading? (
+              [...Array(rowsPerPage)].map((x, i) => {
                 return (
-                  <Row row={row} />
+                  <TableRow>
+                    {[...Array(5)].map((x, i) => (
+                      <TableCell>
+                        <RowSkeleton />
+                      </TableCell>
+                    ))}
+                  </TableRow>
                 );
-              })}
+              })
+            ) : (
+              data.data.map((row: any) => {
+                return <Row row={row} />;
+              })
+            )}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 15]}
         component="div"
-        count={rows.length}
+        count={totalCount}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

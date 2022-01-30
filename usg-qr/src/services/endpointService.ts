@@ -4,45 +4,29 @@ export const getActiveService=()=>{
     return httpClient.get("serviceendpoint/activeserviceendpoint")
 }
 
-export const getServices=()=>{
-    return httpClient.get("serviceendpoint/serviceendpoints")
+export const getServices=(page: any = 0, size: any = 3)=>{
+    return httpClient.get(`serviceendpoint/serviceendpoints/?page=${page}&size=${size}`)
 }
+
+export const editService = (id: any, data: any) => {
+    return httpClient.put(`serviceendpoint/editserviceendpoint/${id}`, data);
+  };
+
+  export const createService = (data: any) => {
+    return httpClient.post(`serviceendpoint/createserviceendpoint`, data);
+  };
 
 export const setActiveService=(id:any)=>{
     return httpClient.put(`serviceendpoint/setactiveserviceendpoint/${id}`)
 }
 
-// export const createBook = (data:any, token:any) => {
-//     return httpClient.post("option/createoption", data, {
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//         "Content-Type": "multipart/form-data",
-//       },
-//     });
-//   };
+export const searchServices = (input: any = "") => {
+    return httpClient.get(`serviceendpoint/searchserviceendpoints?input=${input}`);
+  };
+  
 
 
-//   export const getBooks=(id:any, page:any=0, size:any=3)=>{
-//       return httpClient.get(`book/books?page=${page}&size=${size}`)
-//   }
-
-//   export const getBooksCount=()=>{
-//     return httpClient.get(`book/bookscount`)
-// }
+export const deleteService = (id: any) => {
+    return httpClient.delete(`serviceendpoint/deleteserviceendpoint/${id}`);
+  };
   
-//   export const getBookById = (id:any) => {
-//     return httpClient.get("option/getoptionbyid/" + id);
-//   };
-  
-//   export const editBook = (id:any, data:any, token:any) => {
-//       return httpClient.put("option/editoption/"+id, data, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           "Content-Type": "multipart/form-data",
-//         },
-//       });
-//     };
-  
-//     export const deleteBook = (id:any) =>{
-//       return httpClient.delete("option/deleteoption/"+id)
-//     }

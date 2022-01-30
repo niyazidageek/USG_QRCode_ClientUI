@@ -15,6 +15,7 @@ const Issues = Loadable(lazy(() => import("../views/pages/issues")));
 const Clients = Loadable(lazy(() => import("../views/pages/clients")));
 const Profile = Loadable(lazy(() => import("../views/pages/profile")));
 const BookDetail = Loadable(lazy(() => import("../views/pages/books/bookDetail")));
+const IssueDetail = Loadable(lazy(() => import("../views/pages/issues/issueDetail")));
 
 const MainRoutes = (isLoggedIn: any, isAuhtorized: any, goBack: any) => ({
   path: "/",
@@ -54,6 +55,10 @@ const MainRoutes = (isLoggedIn: any, isAuhtorized: any, goBack: any) => ({
     {
       path: "issues",
       element: <Issues />,
+    },
+    {
+      path: "issues/:id",
+      element: <IssueDetail />,
     },
     {
       path: "clients",

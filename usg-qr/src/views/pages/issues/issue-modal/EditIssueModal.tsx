@@ -10,17 +10,26 @@ import { FormHelperText, Grid, InputLabel, OutlinedInput } from "@mui/material";
 import { Typography, FormControl, FormControlLabel } from "@mui/material";
 import {
   LoadingButton,
+  LocalizationProvider,
+  MobileDatePicker,
 } from "@mui/lab";
+import { useRef } from "react";
 import { useFormik } from "formik";
+import { createContext } from "react";
+import DateAdapter from "@mui/lab/AdapterMoment";
+import { bookSchema } from "../../../../validations/bookSchema";
 import { useMutation, useQueryClient } from "react-query";
+import { editBook } from "../../../../services/bookService";
 import MuiAlert from "@mui/material/Alert";
 import SaveIcon from "@mui/icons-material/Save";
 import { Snackbar } from "@mui/material";
-import {SERVICES } from "../../../../store/queryKeys";
-import { createService } from "../../../../services/endpointService";
-import { serviceSchema } from "../../../../validations/serviceSchema";
+import { BOOKS, ISSUES } from "../../../../store/queryKeys";
+import moment from "moment";
+import * as yup from "yup";
+import { issueSchema } from "../../../../validations/issueSchema";
+import { editIssue } from "../../../../services/issueService";
 
-export default function ServiceModal() {
+export default function EditIssueModal({ issueId, issue }: any) {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
@@ -28,12 +37,12 @@ export default function ServiceModal() {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
-    createService,
+    (data: any) => editIssue(issueId, data),
     {
       onSuccess: (data: any) => {
         setMessage(data.data.message);
         setToastOpen(true);
-        queryClient.invalidateQueries([SERVICES]);
+        queryClient.invalidateQueries([ISSUES, issueId]);
       },
       onError: (err: any) => {
         setToastOpen(true);
@@ -43,13 +52,19 @@ export default function ServiceModal() {
   );
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      description: "",
-      url: ""
+      name: issue.name,
+      date: moment.utc(issue.date).local().format(),
     },
-    validationSchema: serviceSchema,
+    validationSchema: issueSchema,
     onSubmit: (values: any) => {
-      mutate(values);
+      values.date = moment.utc(values.date).format();
+      let form_data = new FormData();
+      for (var key in values) {
+        form_data.append(key, values[key]);
+      }
+      mutate(form_data);
     },
   });
 
@@ -76,42 +91,51 @@ export default function ServiceModal() {
       </Snackbar>
       <Button
         variant="contained"
-        color={"success"}
+        color={"warning"}
         style={{ color: "white", fontWeight: "bold" }}
         onClick={handleClickOpen}
       >
-        Add
+        Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          <Typography fontSize={"1rem"}>Add a service</Typography>
+          <Typography fontSize={"1rem"}>Edit the issue</Typography>
         </DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <Grid container spacing={2} paddingTop={"5px"}>
               <Grid item xs={12} md={6}>
                 <TextField
-                  label="Description"
-                  defaultValue={formik.initialValues.description}
+                  label="Name"
+                  defaultValue={formik.initialValues.name}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   fullWidth
-                  name="description"
-                  error={formik.touched.description && Boolean(formik.errors.description)}
-                  helperText={formik.touched.description && formik.errors.description}
+                  name="name"
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  label="Url"
-                  defaultValue={formik.initialValues.url}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  fullWidth
-                  name="url"
-                  error={formik.touched.url && Boolean(formik.errors.url)}
-                  helperText={formik.touched.url && formik.errors.url}
-                />
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                  <MobileDatePicker
+                    label="Start Date"
+                    inputFormat="DD/MM/yyyy"
+                    value={formik.values.date}
+                    onChange={(e: any) => {
+                      formik.setFieldValue(
+                        "date",
+                        moment.utc(e._d).local().format()
+                      );
+                    }}
+                    renderInput={(params) => (
+                      <TextField fullWidth {...params} />
+                    )}
+                  />
+                  {formik.touched.date && formik.errors.date && (
+                    <FormHelperText error>{formik.errors.date}</FormHelperText>
+                  )}
+                </LocalizationProvider>
               </Grid>
             </Grid>
           </DialogContent>
@@ -129,7 +153,7 @@ export default function ServiceModal() {
               type="submit"
             >
               <Typography fontSize={"1rem"} color={"primary"}>
-                Add
+                Save
               </Typography>
             </LoadingButton>
           </DialogActions>

@@ -7,57 +7,69 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import moment from "moment";
 import Button from "@mui/material/Button";
+import { TableRow as RowSkeleton } from "../../../../components/cards/skeleton/TableRow";
 import Typography from "@mui/material/Typography";
-import { green } from "@mui/material/colors";
-// import SearchBar from "material-ui-search-bar";
-import SearchSection from "../../../../layouts/MainLayout/Header/SearchSection";
+import SearchSection from "../issues-search";
 import IssueModal from "../issue-modal";
+import { useLocation, useNavigate } from "react-router-dom";
+import { isInteger } from "formik";
+import { ISSUES } from "../../../../store/queryKeys";
+import { useQuery } from "react-query";
+import { getIssues } from "../../../../services/issueService";
 
 const columns: any = [
-  { id: "Name", label: "Name", minWidth: 170 },
+  { id: "name", label: "Name", minWidth: 170 },
   { id: "isActive", label: "Status", minWidth: 100 },
   { id: "date", label: "Date", minWidth: 100 },
-  { id: "edit", label: "Edit", minWidth: 100 },
-  { id: "delete", label: "Delete", minWidth: 100 },
-];
-
-function createData(name: any, isActive: any, date:any) {
-  return { name, isActive, date };
-}
-
-
-const rows = [
-  createData("Issue about someone", "Active", "12 January"),
-  createData("Issue about her", "Not active", "24 January"),
+  { id: "view", label: "View", minWidth: 100 },
 ];
 
 export default function IssuesTable() {
-  const [page, setPage]: any = React.useState(0);
-  const [rowsPerPage, setRowsPerPage]: any = React.useState(10);
-  const [searched, setSearched] = React.useState<string>("");
+  const { search } = useLocation();
+  const searchParams = new URLSearchParams(search);
+  const queryPage: any = searchParams.get("page");
+
+  const navigate = useNavigate();
+  const [page, setPage]: any = React.useState(
+    isInteger(queryPage) ? parseInt(queryPage) : 0
+  );
+  const [totalCount, setTotalCount] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
+
+  const { isLoading, data, isError, error, isFetching, refetch, status } =
+    useQuery([ISSUES, page, rowsPerPage], () => getIssues(page, rowsPerPage));
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
+    navigate(`?page=${newPage}`);
   };
-
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
 
+  React.useEffect(() => {
+    if (data?.headers["count"]) {
+      setTotalCount(data?.headers["count"]);
+    }
+  }, [data]);
+
   return (
     <Paper sx={{ width: "100%" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer  sx={{ vh: "100%" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
               <TableCell colSpan={3}>
                 <SearchSection />
               </TableCell>
-              <TableCell align='right' colSpan={3}>
-              <IssueModal />
+              <TableCell align="right" colSpan={3}>
+                <IssueModal />
               </TableCell>
             </TableRow>
             <TableRow>
@@ -73,43 +85,77 @@ export default function IssuesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row: any) => {
-                return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.isActive}</TableCell>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color={"warning"}
-                        style={{ color: "white", fontWeight: "bold" }}
-                      >
-                        Edit
-                      </Button>
-                    </TableCell>
-                    <TableCell>
-                      {" "}
-                      <Button
-                        variant="contained"
-                        color={'error'}
-                        style={{ color: "white", fontWeight: "bold" }}
-                      >
-                        Delete
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+            {isLoading
+              ? [...Array(rowsPerPage)].map((x, i) => {
+                  return (
+                    <TableRow>
+                      {[...Array(3)].map((x, i) => (
+                        <TableCell>
+                          <RowSkeleton />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })
+              : data.data.map((row: any) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.code}
+                    >
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell>
+                        <Typography
+                          lineHeight={"normal"}
+                          fontWeight={"bold"}
+                          color={row.isActive ? "green" : "red"}
+                          alignItems={"center"}
+                          display={"flex"}
+                        >
+                          {row.isActive ? "Active" : "Not active"}
+                          {row.isActive ? (
+                            <CheckIcon
+                              style={{
+                                marginLeft: "0.1rem",
+                                fontWeight: "lighter",
+                              }}
+                            />
+                          ) : (
+                            <CloseIcon
+                              style={{
+                                marginLeft: "0.1rem",
+                                fontWeight: "lighter",
+                              }}
+                            />
+                          )}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        {moment.utc(row.date).local().format("MM/DD/yyyy HH:mm")}
+                      </TableCell>
+                      <TableCell>
+                        {" "}
+                        <Button
+                          variant="contained"
+                          color={"primary"}
+                          onClick={() => navigate(`/issues/${row.id}`)}
+                          style={{ color: "white", fontWeight: "bold" }}
+                        >
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[5, 10, 15]}
         component="div"
-        count={rows.length}
+        count={totalCount}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

@@ -13,7 +13,7 @@ import {
   // ==============================|| SAMPLE PAGE ||============================== //
   
   const IssuesPage = () => (
-    <MainCard title="Books">
+    <MainCard title="Issues">
       <Grid container>
           <IssuesTable/>
       </Grid>

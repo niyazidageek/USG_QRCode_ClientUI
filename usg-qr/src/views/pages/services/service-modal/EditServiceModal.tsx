@@ -13,14 +13,15 @@ import {
 } from "@mui/lab";
 import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "react-query";
+import { editBook } from "../../../../services/bookService";
 import MuiAlert from "@mui/material/Alert";
 import SaveIcon from "@mui/icons-material/Save";
 import { Snackbar } from "@mui/material";
 import {SERVICES } from "../../../../store/queryKeys";
-import { createService } from "../../../../services/endpointService";
+import { editService } from "../../../../services/endpointService";
 import { serviceSchema } from "../../../../validations/serviceSchema";
 
-export default function ServiceModal() {
+export default function EditServiceModal({ serviceId, service }: any) {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
@@ -28,7 +29,7 @@ export default function ServiceModal() {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
-    createService,
+    (data: any) => editService(serviceId, data),
     {
       onSuccess: (data: any) => {
         setMessage(data.data.message);
@@ -43,9 +44,10 @@ export default function ServiceModal() {
   );
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      description: "",
-      url: ""
+      description: service.description,
+      url: service.url
     },
     validationSchema: serviceSchema,
     onSubmit: (values: any) => {
@@ -76,15 +78,15 @@ export default function ServiceModal() {
       </Snackbar>
       <Button
         variant="contained"
-        color={"success"}
+        color={"warning"}
         style={{ color: "white", fontWeight: "bold" }}
         onClick={handleClickOpen}
       >
-        Add
+        Edit
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
-          <Typography fontSize={"1rem"}>Add a service</Typography>
+          <Typography fontSize={"1rem"}>Edit the service</Typography>
         </DialogTitle>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
@@ -129,7 +131,7 @@ export default function ServiceModal() {
               type="submit"
             >
               <Typography fontSize={"1rem"} color={"primary"}>
-                Add
+                Save
               </Typography>
             </LoadingButton>
           </DialogActions>

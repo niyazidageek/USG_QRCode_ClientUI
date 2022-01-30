@@ -6,15 +6,63 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Grid } from "@mui/material";
-import { Typography } from "@mui/material";
+import { FormHelperText, Grid, InputLabel, OutlinedInput } from "@mui/material";
+import { Typography, FormControl, FormControlLabel } from "@mui/material";
+import {
+  LoadingButton,
+  LocalizationProvider,
+  MobileDatePicker,
+} from "@mui/lab";
+import { useFormik } from "formik";
 import DateAdapter from "@mui/lab/AdapterMoment";
-import MobileDatePicker from "@mui/lab/MobileDatePicker";
-import console from "console";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { useMutation, useQueryClient } from "react-query";
+import MuiAlert from "@mui/material/Alert";
+import SaveIcon from "@mui/icons-material/Save";
+import { Snackbar } from "@mui/material";
+import { ISSUES } from "../../../../store/queryKeys";
+import moment from "moment";
+import { issueSchema } from "../../../../validations/issueSchema";
+import { createIssue } from "../../../../services/issueService";
 
 export default function IssueModal() {
   const [open, setOpen] = React.useState(false);
+  const [toastOpen, setToastOpen] = React.useState(false);
+  const [message, setMessage] = React.useState(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isLoading, isError } = useMutation(
+    createIssue,
+    {
+      onSuccess: (data: any) => {
+        setMessage(data.data.message);
+        setToastOpen(true);
+        queryClient.invalidateQueries([ISSUES]);
+        setOpen(false)
+      },
+      onError: (err: any) => {
+        setToastOpen(true);
+        setMessage(err.message);
+      },
+    }
+  );
+
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+      date: moment.utc().local().format()
+    },
+    validationSchema: issueSchema,
+    onSubmit: (values: any) => {
+      values.date = moment.utc(values.date).format();
+      let form_data = new FormData();
+      for (var key in values) {
+        form_data.append(key, values[key]);
+      }
+      console.log(form_data)
+      mutate(form_data);
+    },
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -26,55 +74,84 @@ export default function IssueModal() {
 
   return (
     <div>
-      <LocalizationProvider dateAdapter={DateAdapter}>
-        <Button
-          variant="contained"
-          color={"success"}
-          style={{ color: "white", fontWeight: "bold" }}
-          onClick={handleClickOpen}
-        >
-          Add
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>
-            <Typography fontSize={"1rem"}>Add an issue</Typography>
-          </DialogTitle>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={toastOpen}
+        autoHideDuration={1000}
+        onClose={() => {
+          setToastOpen(false);
+        }}
+        key={"top" + "center"}
+      >
+        <MuiAlert severity={isError ? "error" : "success"}>{message}</MuiAlert>
+      </Snackbar>
+      <Button
+        variant="contained"
+        color={"success"}
+        style={{ color: "white", fontWeight: "bold" }}
+        onClick={handleClickOpen}
+      >
+        Add
+      </Button>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          <Typography fontSize={"1rem"}>Add an issue</Typography>
+        </DialogTitle>
+        <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <Grid container spacing={2} paddingTop={"5px"}>
               <Grid item xs={12} md={6}>
-                <TextField required fullWidth label="Name" variant="outlined" />
+                <TextField
+                  label="Name"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  fullWidth
+                  name="name"
+                  error={formik.touched.name && Boolean(formik.errors.name)}
+                  helperText={formik.touched.name && formik.errors.name}
+                />
               </Grid>
               <Grid item xs={12} md={6}>
-                <MobileDatePicker
-                  label="Start Date"
-                  inputFormat="DD/MM/yyyy"
-                  value={new Date()}
-                  onChange={() => {}}
-                  renderInput={(params) => <TextField fullWidth {...params} />}
-                />   
+                <LocalizationProvider dateAdapter={DateAdapter}>
+      
+                  <MobileDatePicker
+                    label="Start Date"
+                    inputFormat="DD/MM/yyyy"
+                    value={formik.values.date}
+                    onChange={(e: any) => {
+                      formik.setFieldValue(
+                        "date",
+                        moment.utc(e._d).local().format()
+                      );
+                    }}
+                    renderInput={(params) => (
+                      <TextField fullWidth {...params} />
+                    )}
+                  />
+                </LocalizationProvider>
               </Grid>
-              <Grid item xs={12}>
-                  <Button variant="contained" component="label">
-                    Attach images
-                    <input type="file" multiple hidden />
-                  </Button>
-                </Grid>
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>
+            <LoadingButton variant="outlined" onClick={handleClose}>
               <Typography fontSize={"1rem"} color={"primary"}>
-                Cancel
+                Close
               </Typography>
-            </Button>
-            <Button onClick={handleClose}>
+            </LoadingButton>
+            <LoadingButton
+              loadingPosition="start"
+              startIcon={<SaveIcon />}
+              variant="outlined"
+              loading={isLoading}
+              type="submit"
+            >
               <Typography fontSize={"1rem"} color={"primary"}>
                 Add
               </Typography>
-            </Button>
+            </LoadingButton>
           </DialogActions>
-        </Dialog>
-      </LocalizationProvider>
+        </form>
+      </Dialog>
     </div>
   );
 }

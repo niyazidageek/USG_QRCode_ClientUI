@@ -1,5 +1,6 @@
 export const BOOKSCOUNT:string = "bookscount"
 export const SERVICES:string = "services"
+export const SERVICEOPTIONS:string = "serviceoptions"
 export const ACTIVESERVICE:string = "activeservice"
 export const SCANSCOUNT:string = "scanscount"
 export const ISSUESCOUNT:string = "issuescount"

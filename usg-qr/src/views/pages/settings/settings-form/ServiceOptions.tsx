@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import SubCard from "../../../../components/cards/SubCard";
-import { ACTIVEISSUE, ACTIVESERVICE, SERVICES } from "../../../../store/queryKeys";
+import { ACTIVESERVICE, SERVICEOPTIONS } from "../../../../store/queryKeys";
 import { getActiveService, getServices } from "../../../../services/endpointService";
 import { useSetActiveService } from "../../../../hooks/useSetActiveService";
 import { useQueries } from "react-query";
@@ -23,7 +23,7 @@ export default function ServiceOptions() {
       queryFn: () => getActiveService()
     },
     {
-      queryKey: [SERVICES],
+      queryKey: [SERVICEOPTIONS],
       queryFn: () => getServices()
     },
   ]);
@@ -31,7 +31,7 @@ export default function ServiceOptions() {
 
   const {mutate} = useSetActiveService();
 
-  const isLoading = results.some(result => result.isLoading || result.isFetching)
+  const isLoading = results.some(result => result.isLoading)
 
   const services = results[1].data?.data
   const activeService = results[0].data?.status == 204 ? null : results[0].data?.data

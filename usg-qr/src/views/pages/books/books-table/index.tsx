@@ -13,8 +13,7 @@ import Typography from "@mui/material/Typography";
 import { green } from "@mui/material/colors";
 import CloseIcon from "@mui/icons-material/Close";
 import { TableRow as RowSkeleton } from "../../../../components/cards/skeleton/TableRow";
-// import SearchBar from "material-ui-search-bar";
-import SearchSection from "../../../../layouts/MainLayout/Header/SearchSection";
+import SearchSection from '../book-search'
 import BookModal from "../book-modal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BOOKS } from "../../../../store/queryKeys";
