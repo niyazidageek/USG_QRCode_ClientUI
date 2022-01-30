@@ -1,140 +1,98 @@
-import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import PropTypes from "prop-types";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
-import { Grid, MenuItem, TextField, Typography } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
+import { Grid, MenuItem, Select, TextField, Typography } from "@mui/material";
 
 // third-party
-import ApexCharts from 'apexcharts';
-import Chart from 'react-apexcharts';
+import ApexCharts from "apexcharts";
+import Chart from "react-apexcharts";
 
 // project imports
-import SkeletonTotalGrowthBarChart from '../../../components/cards/skeleton/TotalGrowthBarChart';
-import MainCard from '../../../components/cards/MainCard';
-import { gridSpacing } from '../../../store/constants';
+import SkeletonTotalGrowthBarChart from "../../../components/cards/skeleton/TotalGrowthBarChart";
+import MainCard from "../../../components/cards/MainCard";
+import { gridSpacing } from "../../../store/constants";
+import { useQueries, useQuery } from "react-query";
+import { SCANSTATISTICS } from "../../../store/queryKeys";
+import { getScanStatistics } from "../../../services/scanService";
+import { useChart } from "../../../hooks/useChart";
 
-// chart data
-import chartData from './chart-data/total-growth-bar-chart';
+const TotalGrowthBarChart = () => {
 
-const status = [
-    {
-        value: 'today',
-        label: 'Today'
-    },
-    {
-        value: 'month',
-        label: 'This Month'
-    },
-    {
-        value: 'year',
-        label: 'This Year'
-    }
-];
+const [year, setYear] = useState(null);
 
-// ==============================|| DASHBOARD DEFAULT - TOTAL GROWTH BAR CHART ||============================== //
+  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
+    [SCANSTATISTICS],
+    () => getScanStatistics(year),
+  );
 
-const TotalGrowthBarChart = ({ isLoading }:any) => {
-    const [value, setValue] = useState('today');
-    const theme:any = useTheme();
-    const customization = useSelector((state:any) => state.customizationReducer);
-    const chartDataA:any = chartData;
-    const { navType } = customization;
-    const { primary } = theme.palette.text;
-    const darkLight = theme.palette.dark.light;
-    const grey200 = theme.palette.grey[200];
-    const grey500 = theme.palette.grey[500];
+  useEffect(()=>{
+    refetch()
+  },[year])
 
-    const primary200 = theme.palette.primary[200];
-    const primaryDark = theme.palette.primary.dark;
-    const secondaryMain = theme.palette.secondary.main;
-    const secondaryLight = theme.palette.secondary.light;
+  useEffect(()=>{
+    setYear(data?.data.selectedYear)
+  },[isLoading])
 
-    useEffect(() => {
-        const newChartData = {
-            ...chartData.options,
-            colors: [primary200, primaryDark, secondaryMain, secondaryLight],
-            xaxis: {
-                labels: {
-                    style: {
-                        colors: [primary, primary, primary, primary, primary, primary, primary, primary, primary, primary, primary, primary]
-                    }
-                }
-            },
-            yaxis: {
-                labels: {
-                    style: {
-                        colors: [primary]
-                    }
-                }
-            },
-            grid: {
-                borderColor: grey200
-            },
-            tooltip: {
-                theme: 'light'
-            },
-            legend: {
-                labels: {
-                    colors: grey500
-                }
-            }
-        };
+  
 
-        // do not load chart when loading
-        if (!isLoading) {
-            ApexCharts.exec(`bar-chart`, 'updateOptions', newChartData);
-        }
-    }, [navType, primary200, primaryDark, secondaryMain, secondaryLight, primary, darkLight, grey200, isLoading, grey500]);
+  const chart = useChart(data?.data.scansCounts, data?.data.possibleYears);
 
-    return (
-        <>
-            {isLoading ? (
-                <SkeletonTotalGrowthBarChart />
-            ) : (
-                <MainCard>
-                    <Grid container spacing={gridSpacing}>
-                        <Grid item xs={12}>
-                            <Grid container alignItems="center" justifyContent="space-between">
-                                <Grid item>
-                                    <Grid container direction="column" spacing={1}>
-                                        <Grid item>
-                                            <Typography variant="subtitle2">Scan Dynamics</Typography>
-                                        </Grid>
-                                        <Grid item>
-                                            <Typography variant="h3">Overall: 24 scans</Typography>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid item>
-                                    <TextField
-                                        id="standard-select-currency"
-                                        select
-                                        value={value}
-                                        onChange={(e) => setValue(e.target.value)}
-                                    >
-                                        {status.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Chart {...chartDataA} />
-                        </Grid>
+
+  return (
+    <>
+      {!chart ? (
+        <SkeletonTotalGrowthBarChart />
+      ) : (
+        <MainCard>
+          <Grid container spacing={gridSpacing}>
+            <Grid item xs={12}>
+              <Grid
+                container
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Grid item>
+                  <Grid container direction="column" spacing={1}>
+                    <Grid item>
+                      <Typography variant="subtitle2">Scan Dynamics</Typography>
                     </Grid>
-                </MainCard>
-            )}
-        </>
-    );
+                    <Grid item>
+                      <Typography variant="h3">Overall: 24 scans</Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  <Select
+                    disabled={!data?.data.possibleYears}
+                    id="standard-select-currency"
+                    value={year??null}
+                    renderValue={(v)=>v}
+                    onChange={(e:any) => {setYear(e.target.value);}}
+                  >
+                    {data?.data.possibleYears.map((option: any) => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+            <Chart {...chart} />
+            </Grid>
+          </Grid>
+        </MainCard>
+      )}
+    </>
+  );
 };
 
 TotalGrowthBarChart.propTypes = {
-    isLoading: PropTypes.bool
+  isLoading: PropTypes.bool,
 };
 
 export default TotalGrowthBarChart;
