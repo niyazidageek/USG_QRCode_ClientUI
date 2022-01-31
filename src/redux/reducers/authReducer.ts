@@ -8,7 +8,6 @@ const initialState = {
   rememberMe: false,
   name: null,
   surname: null,
-  email: null,
   roles: null,
 };
 
@@ -18,11 +17,10 @@ const authReducer = (state = initialState, action:any) => {
       return {
         ...state,
         username: action.payload.username,
-        email: action.payload.email,
         name: action.payload.name,
         surname: action.payload.surname,
         isLoggedIn: true,
-        jwt: action.payload.token,
+        jwt: action.payload.jwt,
         roles: action.payload.roles,
         jwtExpiryDate: action.payload.expiryDate,
         rememberMe: action.payload.rememberMe,

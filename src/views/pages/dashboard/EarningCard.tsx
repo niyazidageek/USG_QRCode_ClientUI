@@ -45,24 +45,13 @@ const CardWrapper = styled(MainCard)(({ theme }:any) => ({
     }
 }));
 
-const EarningCard = () => {
+function EarningCard ({isLoading, count}:any) {
+
     const theme:any = useTheme();
-
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const handleClick = (event:any) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const {isLoading, data, isError, error, isFetching, refetch} = useGetData(SCANSCOUNT, getScansCount);
 
     return (
         <>
-            {isLoading || isError ? (
+            {isLoading ? (
                 <SkeletonEarningCard />
             ) : (
                 <CardWrapper border={false} content={false}>
@@ -89,7 +78,7 @@ const EarningCard = () => {
                                 <Grid container alignItems="center">
                                     <Grid item>
                                         <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                            {data}
+                                            {count}
                                         </Typography>
                                     </Grid>
                                     <Grid item>
@@ -114,10 +103,6 @@ const EarningCard = () => {
             )}
         </>
     );
-};
-
-EarningCard.propTypes = {
-    isLoading: PropTypes.bool
 };
 
 export default EarningCard;

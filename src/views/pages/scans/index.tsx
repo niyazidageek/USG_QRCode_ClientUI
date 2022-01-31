@@ -9,8 +9,6 @@ import {
   } from "@mui/material";
   import MainCard from "../../../components/cards/MainCard";
   import ScansTable from "./scans-table/ScansTable";
-
-  // ==============================|| SAMPLE PAGE ||============================== //
   
   const ScansPage = () => (
     <MainCard title="Scans">

@@ -58,7 +58,7 @@ const TotalIncomeLightCard = () => {
     if (data?.status == 204) {
       setColor(theme.palette.error);
     }
-  }, [isLoading]);
+  }, [isLoading, isFetching]);
 
   return (
     <>

@@ -1,16 +1,12 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-
-// material-ui
 import { useTheme } from "@mui/material/styles";
 import { Grid, MenuItem, Select, TextField, Typography } from "@mui/material";
-
-// third-party
 import ApexCharts from "apexcharts";
 import Chart from "react-apexcharts";
+import { Skeleton } from "@mui/material";
 
-// project imports
 import SkeletonTotalGrowthBarChart from "../../../components/cards/skeleton/TotalGrowthBarChart";
 import MainCard from "../../../components/cards/MainCard";
 import { gridSpacing } from "../../../store/constants";
@@ -19,7 +15,7 @@ import { SCANSTATISTICS } from "../../../store/queryKeys";
 import { getScanStatistics } from "../../../services/scanService";
 import { useChart } from "../../../hooks/useChart";
 
-const TotalGrowthBarChart = () => {
+const TotalGrowthBarChart = ({ count, isLoadingCount }: any) => {
   const [year, setYear] = useState(null);
 
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
@@ -56,7 +52,17 @@ const TotalGrowthBarChart = () => {
                       <Typography variant="subtitle2">Scan Dynamics</Typography>
                     </Grid>
                     <Grid item>
-                      <Typography variant="h3">Overall: 24 scans</Typography>
+                      {isLoadingCount ? (
+                        <Typography variant="h3">
+                        <Skeleton />
+                      </Typography>
+                        
+                      ) : (
+                        <Typography variant="h3">
+                          Overall:{" "}
+                          {count != 1 ? count + " scans" : count + " scan"}
+                        </Typography>
+                      )}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -87,10 +93,6 @@ const TotalGrowthBarChart = () => {
       )}
     </>
   );
-};
-
-TotalGrowthBarChart.propTypes = {
-  isLoading: PropTypes.bool,
 };
 
 export default TotalGrowthBarChart;
