@@ -11,3 +11,7 @@ export const getRandomClient = (issueId: any) => {
 export const getClients = (page: any = 0, size: any = 3) => {
   return httpClient.get(`client/clients?page=${page}&size=${size}`);
 };
+
+export const getClientById = (id: any) => {
+  return httpClient.get(`client/clients/${id}`);
+};

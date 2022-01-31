@@ -1,4 +1,3 @@
-// material-ui
 import {
     Typography,
     Grid,
@@ -10,9 +9,8 @@ import {
   import MainCard from "../../../components/cards/MainCard";
   import ClientsTable from "./clients-table"
 
-  // ==============================|| SAMPLE PAGE ||============================== //
   
-  const IssuesPage = () => (
+  const ClientsPage = () => (
     <MainCard title="Clients">
       <Grid container>
           <ClientsTable/>
@@ -20,5 +18,5 @@ import {
     </MainCard>
   );
   
-  export default IssuesPage;
+  export default ClientsPage;
   

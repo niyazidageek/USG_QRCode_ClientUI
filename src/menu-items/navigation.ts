@@ -6,6 +6,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NewspaperOutlinedIcon from '@mui/icons-material/NewspaperOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
 // constant
 const icons = {
@@ -15,10 +16,9 @@ const icons = {
     LibraryBooksOutlinedIcon,
     NewspaperOutlinedIcon,
     PeopleAltOutlinedIcon,
-    PermIdentityIcon
+    PermIdentityIcon,
+    QrCodeScannerIcon
 };
-
-// ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const navigation = {
     id: 'navigation',
@@ -71,6 +71,14 @@ const navigation = {
             type: 'item',
             url: '/clients',
             icon: icons.PeopleAltOutlinedIcon,
+            breadcrumbs: false
+        },
+        {
+            id: 'scans-page',
+            title: 'Scans',
+            type: 'item',
+            url: '/scans',
+            icon: icons.QrCodeScannerIcon,
             breadcrumbs: false
         },
         {

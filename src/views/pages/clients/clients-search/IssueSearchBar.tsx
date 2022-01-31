@@ -84,14 +84,29 @@ export default function IssueSearchBar() {
             </Box>
            
             <ArrowRightAltIcon fontSize="large" />
-            <LoadingButton
+            <Box sx={{position: 'relative' }}>
+            <Button
               type="submit"
               variant="contained"
-              loading={randomizeLoading}
+              disabled={randomizeLoading}
               style={{ color: "white", backgroundColor:'purple' ,fontWeight: "bold" }}
             >
               Randomize
-            </LoadingButton>
+            </Button>
+            {randomizeLoading && (
+          <CircularProgress
+            size={24}
+            sx={{
+              color: 'whitesmoke',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-12px',
+              marginLeft: '-12px',
+            }}
+          />
+        )}
+        </Box> 
           </Box>
         </form>
       )}

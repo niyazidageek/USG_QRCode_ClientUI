@@ -20,26 +20,22 @@ import { getScanStatistics } from "../../../services/scanService";
 import { useChart } from "../../../hooks/useChart";
 
 const TotalGrowthBarChart = () => {
-
-const [year, setYear] = useState(null);
+  const [year, setYear] = useState(null);
 
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     [SCANSTATISTICS],
-    () => getScanStatistics(year),
+    () => getScanStatistics(year)
   );
 
-  useEffect(()=>{
-    refetch()
-  },[year])
+  useEffect(() => {
+    refetch();
+  }, [year]);
 
-  useEffect(()=>{
-    setYear(data?.data.selectedYear)
-  },[isLoading])
-
-  
+  useEffect(() => {
+    setYear(data?.data.selectedYear);
+  }, [isLoading]);
 
   const chart = useChart(data?.data.scansCounts, data?.data.possibleYears);
-
 
   return (
     <>
@@ -68,9 +64,11 @@ const [year, setYear] = useState(null);
                   <Select
                     disabled={!data?.data.possibleYears}
                     id="standard-select-currency"
-                    value={year??null}
-                    renderValue={(v)=>v}
-                    onChange={(e:any) => {setYear(e.target.value);}}
+                    value={year ?? null}
+                    renderValue={(v) => v}
+                    onChange={(e: any) => {
+                      setYear(e.target.value);
+                    }}
                   >
                     {data?.data.possibleYears.map((option: any) => (
                       <MenuItem key={option} value={option}>
@@ -82,7 +80,7 @@ const [year, setYear] = useState(null);
               </Grid>
             </Grid>
             <Grid item xs={12}>
-            <Chart {...chart} />
+              <Chart {...chart} />
             </Grid>
           </Grid>
         </MainCard>

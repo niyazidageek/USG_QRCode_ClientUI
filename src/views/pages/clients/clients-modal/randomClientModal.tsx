@@ -65,12 +65,27 @@ export function RandomClientModal({ open, setOpen, email }: any) {
           width={"100%"}
           height={"100%"}
         >
-          <Typography display={'inline-block'} fontWeight={"bold"} color={"black"} fontSize={"3rem"}>
+          <Typography
+            textAlign={'center'}
+            display={"inline-block"}
+            fontWeight={"bold"}
+            style={{lineBreak:'anywhere'}}
+            color={"black"}
+            fontSize={"3rem"}
+          >
             Winner:{" "}
-            <Typography display={'inline-block'} fontSize={"3rem"} fontWeight={"bold"} color={"purple"}>
-             {email}
+            <Typography
+              style={{lineBreak:'anywhere'}}
+             textAlign={'center'}
+              display={"inline-block"}
+              fontSize={"3rem"}
+              fontWeight={"bold"}
+              color={"purple"}
+            >
+              {email}
             </Typography>
           </Typography>
+
           <Confetti gravity={0.2} numberOfPieces={400} />
         </Box>
       </Dialog>

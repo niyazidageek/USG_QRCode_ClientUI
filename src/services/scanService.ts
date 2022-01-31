@@ -10,9 +10,23 @@ export const getScanStatistics = (year: any = null) => {
     : httpClient.get(`scan/scanstatistics/${year}`);
 };
 
-//   export const getBooks=(id:any, page:any=0, size:any=3)=>{
-//       return httpClient.get(`book/books?page=${page}&size=${size}`)
-//   }
+export const getScansByClient = (id: any, page: any = 0, size: any = 3) => {
+  return httpClient.get(`scan/scansbyclient/${id}?page=${page}&size=${size}`);
+};
+
+export const getScans = (page: any = 0, size: any = 3, issueId: any = null) => {
+  return issueId
+    ? httpClient.get(`scan/scans?page=${page}&size=${size}&issueId=${issueId}`)
+    : httpClient.get(`scan/scans?page=${page}&size=${size}`);
+};
+
+export const getScanById = (id: any) => {
+  return httpClient.get(`scan/scans/${id}`);
+};
+
+export const deleteScan = (id: any) => {
+  return httpClient.delete(`scan/deletescan/${id}`);
+};
 
 //   export const getBooksCount=()=>{
 //     return httpClient.get(`book/bookscount`)
