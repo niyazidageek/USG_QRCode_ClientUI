@@ -1,25 +1,13 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-
-// material-ui
 import { styled, useTheme } from '@mui/material/styles';
 import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
-
-// project imports
 import MainCard from '../../../components/cards/MainCard';
 import SkeletonEarningCard from '../../../components/cards/skeleton/EarningCard'
-
-// assets
-import EarningIcon from '../../../assets/images/icons/frame (1).svg';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
-import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
-import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 import { SCANSCOUNT } from '../../../store/queryKeys';
 import { getScansCount } from '../../../services/scanService';
 import { useGetData } from '../../../hooks/useGetData';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
 const CardWrapper = styled(MainCard)(({ theme }:any) => ({
     backgroundColor: theme.palette.secondary.dark,
@@ -57,8 +45,6 @@ const CardWrapper = styled(MainCard)(({ theme }:any) => ({
     }
 }));
 
-// ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
-
 const EarningCard = () => {
     const theme:any = useTheme();
 
@@ -94,7 +80,7 @@ const EarningCard = () => {
                                                 mt: 1
                                             }}
                                         >
-                                            <img src={EarningIcon} alt="Notification" />
+                                            <QrCodeScannerIcon  style={{fill: "white"}}/>
                                         </Avatar>
                                     </Grid>
                                 </Grid>

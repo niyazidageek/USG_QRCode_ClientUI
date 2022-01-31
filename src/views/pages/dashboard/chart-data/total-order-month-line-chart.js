@@ -1,9 +1,10 @@
-// ===========================|| DASHBOARD - TOTAL ORDER MONTH CHART ||=========================== //
-
 const chartData = {
     type: 'line',
     height: 90,
     options: {
+        crosshairs:{
+            show:false
+        },
         chart: {
             sparkline: {
                 enabled: true
@@ -23,7 +24,8 @@ const chartData = {
         },
         yaxis: {
             min: 0,
-            max: 100
+            max: 100,
+            show:false
         },
         tooltip: {
             theme: 'dark',
@@ -31,7 +33,7 @@ const chartData = {
                 enabled: false
             },
             x: {
-                show: false
+                show: true
             },
             y: {
                 title: 'Total Order'
@@ -39,14 +41,19 @@ const chartData = {
             marker: {
                 show: false
             }
-        }
+        },
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          }
     },
     series: [
         {
-            name: 'series1',
-            data: [45, 66, 41, 89, 25, 44, 9, 54]
+            name: "Issues: ",
+            data: [45, 66, 89, 25,14],
         }
-    ]
+    ],
+    
+    
 };
 
 export default chartData;

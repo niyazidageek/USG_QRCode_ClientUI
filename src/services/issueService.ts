@@ -24,6 +24,16 @@ export const getIssueById = (id: any) => {
   return httpClient.get(`issue/issues/${id}`);
 };
 
+export const getIssueStatistics = (year: any = null) => {
+  return year
+    ? httpClient.get(`issue/issuestatistics/${year}`)
+    : httpClient.get(`issue/issuestatistics`);
+};
+
+export const getAllIssueStatistics = () => {
+  return httpClient.get(`issue/allissuestatistics`);
+};
+
 export const editIssue = (id: any, data: any) => {
   return httpClient.put(`issue/editissue/${id}`, data, {
     headers: {

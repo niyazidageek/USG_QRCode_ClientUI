@@ -1,5 +1,3 @@
-// ===========================|| DASHBOARD - TOTAL ORDER YEAR CHART ||=========================== //
-
 const chartData = {
     type: 'line',
     height: 90,
@@ -23,7 +21,8 @@ const chartData = {
         },
         yaxis: {
             min: 0,
-            max: 100
+            max: 100,
+            show:false
         },
         tooltip: {
             theme: 'dark',

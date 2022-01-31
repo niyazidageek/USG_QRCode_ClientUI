@@ -28,13 +28,6 @@ export const deleteScan = (id: any) => {
   return httpClient.delete(`scan/deletescan/${id}`);
 };
 
-//   export const getBooksCount=()=>{
-//     return httpClient.get(`book/bookscount`)
-// }
-
-//   export const getBookById = (id:any) => {
-//     return httpClient.get("option/getoptionbyid/" + id);
-//   };
 
 //   export const editBook = (id:any, data:any, token:any) => {
 //       return httpClient.put("option/editoption/"+id, data, {
@@ -44,7 +37,3 @@ export const deleteScan = (id: any) => {
 //         },
 //       });
 //     };
-
-//     export const deleteBook = (id:any) =>{
-//       return httpClient.delete("option/deleteoption/"+id)
-//     }
