@@ -1,16 +1,12 @@
 import { Link } from 'react-router-dom';
-
-// material-ui
 import { ButtonBase } from '@mui/material';
-
-// project imports
+import Logo from '../../../assets/images/logo.png'
+import TimesLogo from '../../../assets/images/thetimes.png'
 import config from '../../../config';
 
-// ==============================|| MAIN LOGO ||============================== //
-
 const LogoSection = () => (
-    <ButtonBase disableRipple component={Link} to={config.defaultPath}>
- 
+    <ButtonBase disableRipple component={Link} to={'/'}>
+        <img width={'150px'} src={TimesLogo} alt="" />
     </ButtonBase>
 );
 

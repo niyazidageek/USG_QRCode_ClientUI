@@ -7,17 +7,9 @@ import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
 
 // third-party
 import Chart from "react-apexcharts";
-
-// project imports
 import MainCard from "../../../components/cards/MainCard";
 import SkeletonTotalOrderCard from "../../../components/cards/skeleton/EarningCard";
-
-import ChartDataMonth from "./chart-data/total-order-month-line-chart";
-import ChartDataYear from "./chart-data/total-order-year-line-chart";
-
-// assets
 import NewspaperIcon from "@mui/icons-material/Newspaper";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import {
   ISSUEALLSTATISTICS,
   ISSUEMONTHSSTATISTICS,
@@ -140,7 +132,7 @@ const TotalOrderLineChartCard = () => {
                       sx={{ color: "inherit" }}
                       onClick={(e) => handleChangeTime(e, true)}
                     >
-                      Month
+                      Current year
                     </Button>
                     <Button
                       disableElevation
@@ -149,7 +141,7 @@ const TotalOrderLineChartCard = () => {
                       sx={{ color: "inherit" }}
                       onClick={(e) => handleChangeTime(e, false)}
                     >
-                      Year
+                      All time
                     </Button>
                   </Grid>
                 </Grid>
@@ -159,17 +151,17 @@ const TotalOrderLineChartCard = () => {
                   <Grid item xs={6}>
                     <Grid container alignItems="center">
                       <Grid item>
-                      <Typography
-                            sx={{
-                              fontSize: "2.125rem",
-                              fontWeight: 500,
-                              mr: 1,
-                              mt: 1.75,
-                              mb: 0.75,
-                            }}
-                          >
-                            {data}
-                          </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "2.125rem",
+                            fontWeight: 500,
+                            mr: 1,
+                            mt: 1.75,
+                            mb: 0.75,
+                          }}
+                        >
+                          {data}
+                        </Typography>
                       </Grid>
 
                       <Grid item xs={12}>
