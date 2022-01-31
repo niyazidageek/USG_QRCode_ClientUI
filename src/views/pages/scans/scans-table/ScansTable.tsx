@@ -79,10 +79,10 @@ export default function ScansTable() {
               </TableCell>
             </TableRow>
             <TableRow>
-              {columns.map((column: any) => (
+              {columns.map((column: any, i:any) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
+                  align={i!=0?'right':'left'}
                   style={{ top: 57 }}
                 >
                   {column.label}
@@ -107,13 +107,13 @@ export default function ScansTable() {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1}>
                       <TableCell>{row.deviceType}</TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {moment
                           .utc(row.date)
                           .local()
                           .format("MM/DD/yyyy HH:mm")}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {" "}
                         <Button
                           variant="contained"

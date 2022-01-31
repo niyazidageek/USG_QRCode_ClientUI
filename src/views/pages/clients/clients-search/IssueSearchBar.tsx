@@ -97,7 +97,7 @@ export default function IssueSearchBar() {
           <CircularProgress
             size={24}
             sx={{
-              color: 'whitesmoke',
+              color: 'white',
               position: 'absolute',
               top: '50%',
               left: '50%',

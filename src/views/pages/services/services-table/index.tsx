@@ -48,12 +48,13 @@ function Row(props: any) {
           </IconButton>
         </TableCell>
         <TableCell>{row.description}</TableCell>
-        <TableCell>
+        <TableCell align="right">
           <Typography
             lineHeight={"normal"}
             fontWeight={"bold"}
             color={row.isActive ? "green" : "red"}
             alignItems={"center"}
+            justifyContent={'flex-end'}
             display={"flex"}
           >
             {row.isActive ? "Active" : "Not active"}
@@ -74,10 +75,10 @@ function Row(props: any) {
             )}
           </Typography>
         </TableCell>
-        <TableCell>
+        <TableCell align="right">
          <EditServiceModal serviceId={row.id} service={row}/>
         </TableCell>
-        <TableCell>
+        <TableCell align="right">
           <DeleteAlert serviceId={row.id}/>
         </TableCell>
       </TableRow>
@@ -96,17 +97,14 @@ function Row(props: any) {
 
 export default function ServicesTable() {
   const { search } = useLocation();
-  // const [rows, setRows]: any = React.useState(null);
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
-  // const [loadingSearch, setLoadingSearch] = React.useState(false);
   const navigate = useNavigate();
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
   );
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
-  // const [cancel, setCancel]: any = React.useState(false);
 
   const { isLoading, data, isError, error, isFetching, refetch, status } =
     useQuery([SERVICES, page, rowsPerPage], () =>
@@ -117,14 +115,6 @@ export default function ServicesTable() {
     setPage(newPage);
     navigate(`?page=${newPage}`);
   };
-
-  // React.useEffect(() => {
-  //   if (cancel) {
-  //     setPage(0);
-  //     setCancel(false);
-  //   }
-  // }, [cancel]);
-
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -136,40 +126,19 @@ export default function ServicesTable() {
     }
   }, [data]);
 
-  // React.useEffect(() => {
-  //   console.log(rows);
-  // }, [rows]);
-
-  // React.useEffect(() => {
-  //   if (!isFetching) {
-  //     setRows(data.data);
-  //   }
-  // }, [isFetching]);
 
   return (
     <Paper sx={{ width: "100%" }}>
       <TableContainer sx={{ vh:'100%' }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table aria-label="sticky table">
           <TableHead>
             <TableRow>
-              <TableCell colSpan={3}>
-                {/* <SearchSection
-                  setRows={setRows}
-                  setCancel={setCancel}
-                  setLoadingSearch={setLoadingSearch}
-                /> */}
-              </TableCell>
-              <TableCell align="right" colSpan={4}>
-                <ServiceModal />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell />
-              {columns.map((column: any) => (
+              <TableCell><ServiceModal /></TableCell>
+              {columns.map((column: any, i:any) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
-                  style={{ top: 57, width: "100%" }}
+                  align={i!==0?'right':'left'}
+                  style={{ top: 57}}
                 >
                   {column.label}
                 </TableCell>

@@ -70,8 +70,8 @@ export default function ServicesTable() {
               </TableCell>
             </TableRow>
             <TableRow>
-              {columns.map((column: any) => (
-                <TableCell key={column.id} style={{ top: 57, width: "100%" }}>
+              {columns.map((column: any, i:any) => (
+                <TableCell key={column.id} style={{ top: 57 }} align={i!==0?'right':'left'}>
                   {column.label}
                 </TableCell>
               ))}
@@ -99,12 +99,13 @@ export default function ServicesTable() {
                       key={row.code}
                     >
                       <TableCell>{row.name}</TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         <Typography
                           lineHeight={"normal"}
                           fontWeight={"bold"}
                           color={row.isActive ? "green" : "red"}
                           alignItems={"center"}
+                          justifyContent={'flex-end'}
                           display={"flex"}
                         >
                           {row.isActive ? "Active" : "Not active"}
@@ -125,7 +126,7 @@ export default function ServicesTable() {
                           )}
                         </Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {" "}
                         <Button
                           variant="contained"

@@ -73,11 +73,11 @@ export default function IssuesTable() {
               </TableCell>
             </TableRow>
             <TableRow>
-              {columns.map((column: any) => (
+              {columns.map((column: any, id:any) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
-                  style={{ top: 57, width: "100%" }}
+                  align={id!==0?'right':'left'}
+                  style={{ top: 57 }}
                 >
                   {column.label}
                 </TableCell>
@@ -89,8 +89,8 @@ export default function IssuesTable() {
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>
-                      {[...Array(3)].map((x, i) => (
-                        <TableCell>
+                      {[...Array(4)].map((x, i) => (
+                        <TableCell  align={i!==0?'right':'left'}>
                           <RowSkeleton />
                         </TableCell>
                       ))}
@@ -106,13 +106,14 @@ export default function IssuesTable() {
                       key={row.code}
                     >
                       <TableCell>{row.name}</TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         <Typography
                           lineHeight={"normal"}
                           fontWeight={"bold"}
                           color={row.isActive ? "green" : "red"}
                           alignItems={"center"}
                           display={"flex"}
+                          justifyContent={'flex-end'}
                         >
                           {row.isActive ? "Active" : "Not active"}
                           {row.isActive ? (
@@ -132,10 +133,10 @@ export default function IssuesTable() {
                           )}
                         </Typography>
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {moment.utc(row.date).local().format("MM/DD/yyyy HH:mm")}
                       </TableCell>
-                      <TableCell>
+                      <TableCell align="right">
                         {" "}
                         <Button
                           variant="contained"
