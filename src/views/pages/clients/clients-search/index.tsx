@@ -10,9 +10,11 @@ import { Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { searchClients } from "../../../../services/clientService";
+import { useSelector } from "react-redux";
 
 export default function SearchSection() {
-  const { mutate, data, isLoading }: any = useMutation(searchClients)
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const { mutate, data, isLoading }: any = useMutation((input)=>searchClients(input, jwt))
   const [input, setInput] = React.useState("");
   const navigate = useNavigate();
 

@@ -19,16 +19,17 @@ import { Snackbar } from "@mui/material";
 import {SERVICES } from "../../../../store/queryKeys";
 import { createService } from "../../../../services/endpointService";
 import { serviceSchema } from "../../../../validations/serviceSchema";
+import { useSelector } from "react-redux";
 
 export default function ServiceModal() {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
-    createService,
+    (data)=>createService(data, jwt),
     {
       onSuccess: (data: any) => {
         setMessage(data.data.message);

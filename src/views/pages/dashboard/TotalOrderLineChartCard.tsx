@@ -24,6 +24,7 @@ import { useGetData } from "../../../hooks/useGetData";
 import { useQueries } from "react-query";
 import { useLineMonthsChart } from "../../../hooks/useLineMonthsChart";
 import { useLineYearsChart } from "../../../hooks/useLineYearsChart";
+import { useSelector } from "react-redux";
 
 const CardWrapper = styled(MainCard)(({ theme }: any) => ({
   backgroundColor: theme.palette.primary.dark,
@@ -70,6 +71,7 @@ const CardWrapper = styled(MainCard)(({ theme }: any) => ({
 // ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
 
 const TotalOrderLineChartCard = () => {
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const theme: any = useTheme();
   const [timeValue, setTimeValue] = useState(false);
   const handleChangeTime = (event: any, newValue: any) => {
@@ -78,17 +80,17 @@ const TotalOrderLineChartCard = () => {
 
   const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
     ISSUESCOUNT,
-    getIssuesCount
+    ()=>getIssuesCount(jwt)
   );
 
   const results = useQueries([
     {
       queryKey: [ISSUEMONTHSSTATISTICS],
-      queryFn: () => getIssueStatistics(),
+      queryFn: () => getIssueStatistics(null,jwt),
     },
     {
       queryKey: [ISSUEALLSTATISTICS],
-      queryFn: () => getAllIssueStatistics(),
+      queryFn: () => getAllIssueStatistics(jwt),
     },
   ]);
 

@@ -14,11 +14,13 @@ import { getActiveBook, searchBooks } from "../../../../services/bookService";
 import { useGetData } from "../../../../hooks/useGetData";
 import { useSearchBooks } from "../../../../hooks/useSearchBooks";
 import BookSearch from "./BookSearchBar";
+import { useSelector } from "react-redux";
 
 
 export default function BookOptions() {
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
 
-    const {isLoading, data ,isError, error, isFetching, refetch} = useGetData(ACTIVEBOOK, getActiveBook);
+    const {isLoading, data ,isError, error, isFetching, refetch} = useGetData(ACTIVEBOOK, ()=>getActiveBook(jwt));
   return (
     <>
       {isLoading ? (

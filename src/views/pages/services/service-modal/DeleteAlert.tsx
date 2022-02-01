@@ -15,13 +15,14 @@ import { useNavigate } from "react-router-dom";
 import { deleteService } from "../../../../services/endpointService";
 import {useQueryClient} from 'react-query'
 import {SERVICES } from "../../../../store/queryKeys";
+import { useSelector } from "react-redux";
 
 export default function DeleteAlert({ serviceId }: any) {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
   const navigate = useNavigate();
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -32,7 +33,7 @@ export default function DeleteAlert({ serviceId }: any) {
 
   const queryClient = useQueryClient()
 
-  const { mutate, isLoading, isError } = useMutation(deleteService, {
+  const { mutate, isLoading, isError } = useMutation((id)=>deleteService(id,jwt), {
     onSuccess: (data: any) => {
       setMessage(data.data.message);
       setToastOpen(true);

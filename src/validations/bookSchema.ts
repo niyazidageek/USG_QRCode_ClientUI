@@ -13,9 +13,5 @@ export const bookSchema = Yup.object().shape({
 
   url: Yup.string()
     .min(10, "Url is too short - shoul be at least 10 chars.")
-    .matches(
-      /((https?):\/\/)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-      "Enter correct url!"
-    )
     .required("Required!"),
 });

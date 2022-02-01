@@ -22,6 +22,7 @@ import { isInteger } from "formik";
 import { useQuery } from "react-query";
 import { CLIENTS } from "../../../../store/queryKeys";
 import { getClients } from "../../../../services/clientService";
+import { useSelector } from "react-redux";
 
 
 
@@ -35,10 +36,11 @@ export default function ClientsTable() {
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
   );
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
   const { isLoading, data, isError, error, isFetching, refetch, status } =
-    useQuery([CLIENTS, page, rowsPerPage], () => getClients(page, rowsPerPage));
+    useQuery([CLIENTS, page, rowsPerPage], () => getClients(page, rowsPerPage, jwt));
   const navigate = useNavigate();
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);

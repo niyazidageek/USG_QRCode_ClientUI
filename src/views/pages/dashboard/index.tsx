@@ -15,7 +15,8 @@ import { getScansCount } from "../../../services/scanService";
 
 const Dashboard = () => {
 
-  const {isLoading, data, isError, error, isFetching, refetch} = useGetData(SCANSCOUNT, getScansCount);
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const {isLoading, data, isError, error, isFetching, refetch} = useGetData(SCANSCOUNT, ()=>getScansCount(jwt));
 
   const [count, setCount] = useState(0);
 

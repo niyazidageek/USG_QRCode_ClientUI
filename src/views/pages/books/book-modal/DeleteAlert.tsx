@@ -15,12 +15,14 @@ import { useMutation } from "react-query";
 import { Navigate } from "react-router-dom";
 import { deleteBook } from "../../../../services/bookService";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function DeleteAlert({ bookId }: any) {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
   const navigate = useNavigate();
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,7 +32,7 @@ export default function DeleteAlert({ bookId }: any) {
     setOpen(false);
   };
 
-  const { mutate, isLoading, isError } = useMutation(deleteBook, {
+  const { mutate, isLoading, isError } = useMutation((id)=>deleteBook(id, jwt), {
     onSuccess: (data: any) => {
       setMessage(data.data.message);
       setToastOpen(true);

@@ -21,6 +21,7 @@ import { getBooks } from "../../../../services/bookService";
 import { useGetData } from "../../../../hooks/useGetData";
 import { useQuery } from "react-query";
 import { isInteger } from "formik";
+import { useSelector } from "react-redux";
 
 const columns: any = [
   { id: "name", label: "Name", minWidth: 100 },
@@ -32,13 +33,14 @@ export default function ServicesTable() {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
   );
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
   const { isLoading, data, isError, error, isFetching, refetch, status } =
-    useQuery([BOOKS, page, rowsPerPage], () => getBooks(page, rowsPerPage));
+    useQuery([BOOKS, page, rowsPerPage], () => getBooks(page, rowsPerPage, jwt));
   const navigate = useNavigate();
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);

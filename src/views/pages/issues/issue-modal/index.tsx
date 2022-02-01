@@ -23,16 +23,17 @@ import { ISSUES } from "../../../../store/queryKeys";
 import moment from "moment";
 import { issueSchema } from "../../../../validations/issueSchema";
 import { createIssue } from "../../../../services/issueService";
+import { useSelector } from "react-redux";
 
 export default function IssueModal() {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
-    createIssue,
+    (data:any)=>createIssue(data, jwt),
     {
       onSuccess: (data: any) => {
         setMessage(data.data.message);

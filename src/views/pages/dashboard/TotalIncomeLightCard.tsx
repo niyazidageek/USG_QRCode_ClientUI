@@ -51,7 +51,7 @@ const TotalIncomeLightCard = () => {
   const [color, setColor]: any = useState(theme.palette.success);
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     ACTIVESERVICE,
-    getActiveService
+    ()=>getActiveService()
   );
 
   useEffect(() => {

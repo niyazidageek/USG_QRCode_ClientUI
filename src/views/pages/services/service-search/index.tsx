@@ -8,9 +8,11 @@ import { useNavigate } from "react-router-dom";
 import { useSearchServices } from "../../../../hooks/useSearchServices";
 import { useMutation } from "react-query";
 import { searchServices } from "../../../../services/endpointService";
+import { useSelector } from "react-redux";
 
 export default function SearchSection({ setRows, setCancel, setLoadingSearch }: any) {
-  const { mutate, data, isLoading }: any = useMutation(searchServices, {
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const { mutate, data, isLoading }: any = useMutation((input)=>searchServices(input, jwt), {
       onSuccess:()=>{
           if(data?.data!=undefined){
             setRows(data.data)

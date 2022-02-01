@@ -17,10 +17,10 @@ import { useChart } from "../../../hooks/useChart";
 
 const TotalGrowthBarChart = ({ count, isLoadingCount }: any) => {
   const [year, setYear] = useState(null);
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     [SCANSTATISTICS],
-    () => getScanStatistics(year)
+    () => getScanStatistics(year, jwt)
   );
 
   useEffect(() => {

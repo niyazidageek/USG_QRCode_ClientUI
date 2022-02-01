@@ -18,16 +18,18 @@ import MuiAlert from "@mui/material/Alert";
 import SaveIcon from "@mui/icons-material/Save";
 import { Snackbar } from "@mui/material";
 import { BOOKS } from "../../../../store/queryKeys";
+import { useSelector } from "react-redux";
 
 export default function AddBookModal() {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
 
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
-    createBook,
+    (data:any)=>createBook(data, jwt),
     {
       onSuccess: (data: any) => {
         setMessage(data.data.message);

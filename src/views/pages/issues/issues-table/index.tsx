@@ -20,6 +20,7 @@ import { isInteger } from "formik";
 import { ISSUES } from "../../../../store/queryKeys";
 import { useQuery } from "react-query";
 import { getIssues } from "../../../../services/issueService";
+import { useSelector } from "react-redux";
 
 const columns: any = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -32,7 +33,7 @@ export default function IssuesTable() {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const navigate = useNavigate();
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
@@ -41,7 +42,7 @@ export default function IssuesTable() {
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
 
   const { isLoading, data, isError, error, isFetching, refetch, status } =
-    useQuery([ISSUES, page, rowsPerPage], () => getIssues(page, rowsPerPage));
+    useQuery([ISSUES, page, rowsPerPage], () => getIssues(page, rowsPerPage, jwt));
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);

@@ -16,6 +16,7 @@ import { isInteger } from "formik";
 import { CLIENTSCANS } from "../../../../store/queryKeys";
 import { useQuery } from "react-query";
 import { getScansByClient } from "../../../../services/scanService";
+import { useSelector } from "react-redux";
 
 const columns: any = [
   { id: "deviceType", label: "Device", minWidth: 100 },
@@ -24,6 +25,7 @@ const columns: any = [
 ];
 
 export default function ScansTable({ clientId }: any) {
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
@@ -37,7 +39,7 @@ export default function ScansTable({ clientId }: any) {
 
   const { isLoading, data, isError, error, isFetching, refetch, status } =
     useQuery([CLIENTSCANS, clientId, page, rowsPerPage], () =>
-      getScansByClient(clientId, page, rowsPerPage)
+      getScansByClient(clientId, page, rowsPerPage, jwt)
     );
 
   const handleChangePage = (event: any, newPage: any) => {

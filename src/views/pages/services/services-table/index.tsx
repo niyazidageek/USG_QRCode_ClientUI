@@ -23,6 +23,7 @@ import { SERVICES } from "../../../../store/queryKeys";
 import { getServices } from "../../../../services/endpointService";
 import EditServiceModal from "../service-modal/EditServiceModal";
 import DeleteAlert from "../service-modal/DeleteAlert";
+import { useSelector } from "react-redux";
 
 const columns: any = [
   { id: "description", label: "Description", minWidth: 170 },
@@ -97,6 +98,7 @@ function Row(props: any) {
 
 export default function ServicesTable() {
   const { search } = useLocation();
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
   const navigate = useNavigate();
@@ -108,7 +110,7 @@ export default function ServicesTable() {
 
   const { isLoading, data, isError, error, isFetching, refetch, status } =
     useQuery([SERVICES, page, rowsPerPage], () =>
-      getServices(page, rowsPerPage)
+      getServices(page, rowsPerPage, jwt)
     );
 
   const handleChangePage = (event: any, newPage: any) => {

@@ -18,6 +18,7 @@ import { useQuery } from "react-query";
 import { getScans } from "../../../../services/scanService";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const columns: any = [
   { id: "deviceType", label: "Device", minWidth: 170 },
@@ -29,7 +30,7 @@ export default function ScansTable() {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const navigate = useNavigate();
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
@@ -40,7 +41,7 @@ export default function ScansTable() {
 
   const { isLoading, data, isError, error, isFetching, refetch, status } =
     useQuery([SCANS, page, rowsPerPage, selectedIssue], () =>
-      getScans(page, rowsPerPage, selectedIssue)
+      getScans(page, rowsPerPage, selectedIssue, jwt)
     );
 
   const handleChangePage = (event: any, newPage: any) => {

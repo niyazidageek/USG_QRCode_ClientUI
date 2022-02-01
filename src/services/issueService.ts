@@ -1,80 +1,93 @@
 import { httpClient } from "./httpClient";
 
-export const getIssuesCount = () => {
-  return httpClient.get("issue/issuescount");
+export const getIssuesCount = (jwt:any) => {
+  return httpClient.get("issue/issuescount", {
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
 export const getActiveIssue = () => {
   return httpClient.get("issue/activeissue");
 };
 
-export const searchIssues = (input: any = "") => {
-  return httpClient.get(`issue/searchissues?input=${input}`);
+export const searchIssues = (input: any = "", jwt:any) => {
+  return httpClient.get(`issue/searchissues?input=${input}`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
-export const setActiveIssue = (id: any) => {
-  return httpClient.put(`issue/setactiveissue/${id}`);
+export const setActiveIssue = (id: any, jwt:any) => {
+  return httpClient.put(`issue/setactiveissue/${id}`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
-export const getIssues = (page: any = 0, size: any = 3) => {
-  return httpClient.get(`issue/issues?page=${page}&size=${size}`);
+export const getIssues = (page: any = 0, size: any = 3,jwt:any) => {
+  return httpClient.get(`issue/issues?page=${page}&size=${size}`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
-export const getIssueById = (id: any) => {
-  return httpClient.get(`issue/issues/${id}`);
+export const getIssueById = (id: any, jwt:any) => {
+  return httpClient.get(`issue/issues/${id}`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
-export const getIssueStatistics = (year: any = null) => {
+export const getIssueStatistics = (year: any = null, jwt:any) => {
   return year
-    ? httpClient.get(`issue/issuestatistics/${year}`)
-    : httpClient.get(`issue/issuestatistics`);
+    ? httpClient.get(`issue/issuestatistics/${year}`,{
+      headers:{
+        Authorization:`Bearer ${jwt}`
+      }
+    })
+    : httpClient.get(`issue/issuestatistics`,{
+      headers:{
+        Authorization:`Bearer ${jwt}`
+      }
+    });
 };
 
-export const getAllIssueStatistics = () => {
-  return httpClient.get(`issue/allissuestatistics`);
+export const getAllIssueStatistics = (jwt:any) => {
+  return httpClient.get(`issue/allissuestatistics`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
-export const editIssue = (id: any, data: any) => {
+export const editIssue = (id: any, data: any, jwt:any) => {
   return httpClient.put(`issue/editissue/${id}`, data, {
     headers: {
+      Authorization:`Bearer ${jwt}`,
       "Content-Type": "multipart/form-data",
     },
   });
 };
 
-export const deleteIssue = (id: any) => {
-  return httpClient.delete(`issue/deleteissue/${id}`);
+export const deleteIssue = (id: any, jwt:any) => {
+  return httpClient.delete(`issue/deleteissue/${id}`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
 };
 
-export const createIssue = (data: any) => {
+export const createIssue = (data: any, jwt:any) => {
   return httpClient.post("issue/createissue", data, {
     headers: {
+      Authorization:`Bearer ${jwt}`,
       "Content-Type": "multipart/form-data",
     },
   });
 };
-
-//   export const getBooks=(id:any, page:any=0, size:any=3)=>{
-//       return httpClient.get(`book/books?page=${page}&size=${size}`)
-//   }
-
-//   export const getBooksCount=()=>{
-//     return httpClient.get(`book/bookscount`)
-// }
-
-//   export const getBookById = (id:any) => {
-//     return httpClient.get("option/getoptionbyid/" + id);
-//   };
-
-//   export const editBook = (id:any, data:any, token:any) => {
-//       return httpClient.put("option/editoption/"+id, data, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           "Content-Type": "multipart/form-data",
-//         },
-//       });
-//     };
-
-//     export const deleteBook = (id:any) =>{
-//       return httpClient.delete("option/deleteoption/"+id)
-//     }

@@ -17,8 +17,12 @@ import { getRandomClient } from "../../../../services/clientService";
 import { useMutation, useQueryClient } from "react-query";
 import { FormHelperText } from "@mui/material";
 import { RandomClientModal } from "../clients-modal/randomClientModal";
+import { useSelector } from "react-redux";
 
 export default function IssueSearchBar() {
+
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+
   const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
     ACTIVEISSUE,
     getActiveIssue
@@ -37,7 +41,7 @@ export default function IssueSearchBar() {
     mutate,
     isLoading: randomizeLoading,
     isError: randomizeError,
-  } = useMutation(getRandomClient, {
+  } = useMutation((issueId)=>getRandomClient(issueId, jwt), {
     onSuccess: (data: any) => {
       setEmail(()=>data.data.email)
       setOpen(()=>true)

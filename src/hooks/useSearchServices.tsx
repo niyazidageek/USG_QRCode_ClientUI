@@ -1,6 +1,8 @@
 import { useMutation } from "react-query";
+import { useSelector } from "react-redux";
 import { searchServices } from "../services/endpointService";
 
 export const useSearchServices = () => {
-  return useMutation(searchServices);
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+  return useMutation((input)=>searchServices(input, jwt));
 };

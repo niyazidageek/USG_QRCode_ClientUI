@@ -19,6 +19,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { useGetData } from "../../../hooks/useGetData";
 import { BOOKSCOUNT } from "../../../store/queryKeys";
 import { getBooksCount } from "../../../services/bookService";
+import { useSelector } from "react-redux";
 
 const CardWrapper = styled(MainCard)(({ theme }: any) => ({
   backgroundColor: theme.palette.primary.dark,
@@ -48,10 +49,11 @@ const CardWrapper = styled(MainCard)(({ theme }: any) => ({
 }));
 
 const TotalIncomeDarkCard = () => {
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const theme: any = useTheme();
   const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
     BOOKSCOUNT,
-    getBooksCount
+    ()=>getBooksCount(jwt)
   );
 
   return (

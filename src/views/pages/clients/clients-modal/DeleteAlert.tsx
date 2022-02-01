@@ -13,11 +13,13 @@ import { LoadingButton } from "@mui/lab";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { deleteIssue } from "../../../../services/issueService";
+import { useSelector } from "react-redux";
 
 export default function DeleteAlert({ issueId }: any) {
   const [open, setOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState(null);
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
   const navigate = useNavigate();
 
   const handleClickOpen = () => {
@@ -28,7 +30,7 @@ export default function DeleteAlert({ issueId }: any) {
     setOpen(false);
   };
 
-  const { mutate, isLoading, isError } = useMutation(deleteIssue, {
+  const { mutate, isLoading, isError } = useMutation((id)=>deleteIssue(id, jwt), {
     onSuccess: (data: any) => {
       setMessage(data.data.message);
       setToastOpen(true);

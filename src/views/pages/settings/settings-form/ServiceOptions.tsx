@@ -13,9 +13,10 @@ import { ACTIVESERVICE, SERVICEOPTIONS } from "../../../../store/queryKeys";
 import { getActiveService, getServices } from "../../../../services/endpointService";
 import { useSetActiveService } from "../../../../hooks/useSetActiveService";
 import { useQueries } from "react-query";
+import { useSelector } from "react-redux";
 export default function ServiceOptions() {
 
-
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
 
   const results = useQueries([
     {
@@ -24,7 +25,7 @@ export default function ServiceOptions() {
     },
     {
       queryKey: [SERVICEOPTIONS],
-      queryFn: () => getServices()
+      queryFn: () => getServices(jwt)
     },
   ]);
 
