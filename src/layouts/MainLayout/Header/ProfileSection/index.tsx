@@ -201,7 +201,7 @@ const ProfileSection = () => {
                           }}
                           selected={selectedIndex === 1}
                           onClick={(event) =>
-                            handleListItemClick(event, 1, "auth/resetpassword")
+                            handleListItemClick(event, 1, "auth/forgotpassword")
                           }
                         >
                           <ListItemIcon>
