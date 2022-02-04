@@ -21,9 +21,8 @@ import { useSelector } from "react-redux";
 import { useAlert } from "react-alert";
 
 export default function IssueSearchBar() {
-
   const jwt = useSelector((state: any) => state.authReducer.jwt);
-  const alert = useAlert()
+  const alert = useAlert();
 
   const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
     ACTIVEISSUE,
@@ -38,18 +37,17 @@ export default function IssueSearchBar() {
     setActiveIssue(data);
   }, [isFetching]);
 
-
   const {
     mutate,
     isLoading: randomizeLoading,
     isError: randomizeError,
-  } = useMutation((issueId)=>getRandomClient(issueId, jwt), {
+  } = useMutation((issueId) => getRandomClient(issueId, jwt), {
     onSuccess: (data: any) => {
-      setEmail(()=>data.data.email)
-      setOpen(()=>true)
+      setEmail(() => data.data.email);
+      setOpen(() => true);
     },
     onError: (err: any) => {
-      alert.show(err.response.data.message, {type:'error'})
+      alert.show(err.response.data.message, { type: "error" });
     },
   });
 
@@ -75,42 +73,46 @@ export default function IssueSearchBar() {
             alignItems={"center"}
             justifyContent={"flex-end"}
           >
-            <Box width={'100%'} flexDirection={'column'}>
-            <IssueSearch
-              error={formik.errors.activeIssueId}            
-              invalid={
-                formik.touched.activeIssueId &&
-                Boolean(formik.errors.activeIssueId)
-              }
-              activeIssue={data}
-              setActiveIssue={setActiveIssue}
-            />
+            <Box width={"100%"} flexDirection={"column"}>
+              <IssueSearch
+                error={formik.errors.activeIssueId}
+                invalid={
+                  formik.touched.activeIssueId &&
+                  Boolean(formik.errors.activeIssueId)
+                }
+                activeIssue={data}
+                setActiveIssue={setActiveIssue}
+              />
             </Box>
-           
+
             <ArrowRightAltIcon fontSize="large" />
-            <Box sx={{position: 'relative' }}>
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={randomizeLoading}
-              style={{ color: "white", backgroundColor:'purple' ,fontWeight: "bold" }}
-            >
-              Randomize
-            </Button>
-            {randomizeLoading && (
-          <CircularProgress
-            size={24}
-            sx={{
-              color: 'white',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              marginTop: '-12px',
-              marginLeft: '-12px',
-            }}
-          />
-        )}
-        </Box> 
+            <Box sx={{ position: "relative" }}>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={randomizeLoading}
+                style={{
+                  color: "white",
+                  backgroundColor: "purple",
+                  fontWeight: "bold",
+                }}
+              >
+                Randomize
+              </Button>
+              {randomizeLoading && (
+                <CircularProgress
+                  size={24}
+                  sx={{
+                    color: "white",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    marginTop: "-12px",
+                    marginLeft: "-12px",
+                  }}
+                />
+              )}
+            </Box>
           </Box>
         </form>
       )}
