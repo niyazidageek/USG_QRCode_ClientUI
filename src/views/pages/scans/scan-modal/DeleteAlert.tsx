@@ -14,11 +14,11 @@ import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { deleteScan } from "../../../../services/scanService";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 export default function DeleteAlert({ scanId }: any) {
   const [open, setOpen] = React.useState(false);
-  const [toastOpen, setToastOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(null);
+  const alert = useAlert()
   const navigate = useNavigate();
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const handleClickOpen = () => {
@@ -31,13 +31,11 @@ export default function DeleteAlert({ scanId }: any) {
 
   const { mutate, isLoading, isError } = useMutation((id)=>deleteScan(id, jwt), {
     onSuccess: (data: any) => {
-      setMessage(data.data.message);
-      setToastOpen(true);
+      alert.show(data.data.message, {type:'success'})
       navigate("/scans");
     },
     onError: (err: any) => {
-      setToastOpen(true);
-      setMessage(err.message);
+      alert.show(err.response.data, {type:'error'})
     },
   });
 
@@ -47,17 +45,6 @@ export default function DeleteAlert({ scanId }: any) {
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={toastOpen}
-        autoHideDuration={1000}
-        onClose={() => {
-          setToastOpen(false);
-        }}
-        key={"top" + "center"}
-      >
-        <MuiAlert severity={isError ? "error" : "success"}>{message}</MuiAlert>
-      </Snackbar>
       <Button
         color="error"
         style={{

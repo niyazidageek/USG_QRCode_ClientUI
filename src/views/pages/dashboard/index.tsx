@@ -12,12 +12,13 @@ import { ONSCAN } from "../../../store/webWocketMethods";
 import { useGetData } from "../../../hooks/useGetData";
 import { SCANSCOUNT } from "../../../store/queryKeys";
 import { getScansCount } from "../../../services/scanService";
+import { useAlert } from "react-alert";
 
 const Dashboard = () => {
 
   const jwt = useSelector((state: any) => state.authReducer.jwt);
-  const {isLoading, data, isError, error, isFetching, refetch} = useGetData(SCANSCOUNT, ()=>getScansCount(jwt));
-
+  const {isLoading, data, isError, error, isFetching, refetch}:any = useGetData(SCANSCOUNT, ()=>getScansCount(jwt));
+  const alert = useAlert()
   const [count, setCount] = useState(0);
 
   useWebSocket(ONSCAN, ()=>setCount((prev:any)=>prev+1))
@@ -26,7 +27,9 @@ const Dashboard = () => {
     if(data) setCount(data)
   },[isLoading, isFetching])
 
-
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   return (
     <Grid container spacing={gridSpacing}>

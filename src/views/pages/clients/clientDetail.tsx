@@ -22,11 +22,18 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteAlert from "./clients-modal/DeleteAlert";
 import { getClientById } from "../../../services/clientService";
 import ScansTable from "./clients-scan-table";
+import { useAlert } from "react-alert";
 
 function ClientPage() {
   let { id } = useParams();
-  const { isLoading, data, isError, error, isFetching, refetch } =
+  const alert = useAlert()
+  const { isLoading, data, isError, error, isFetching, refetch }:any =
     useGetDataById(CLIENTS, id, getClientById);
+
+
+    if(error){
+      alert.show(error.response.data, {type:'error'})
+    }
 
   return (
     <Grid container spacing={2}>
@@ -34,7 +41,7 @@ function ClientPage() {
         <MainCard title="Client details">
           <Grid spacing={2} container>
             <Grid xs={12} md={6} item>
-              {isLoading ? (
+              {isLoading||isError ? (
                 <Card />
               ) : (
                 <SubCard
@@ -60,7 +67,7 @@ function ClientPage() {
               )}
             </Grid>
             <Grid xs={12} md={6} item>
-              {isLoading ? (
+              {isLoading||isError ? (
                 <Card />
               ) : (
                 <Box

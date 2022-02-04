@@ -11,6 +11,9 @@ import { useAuthorize } from '../hooks/useAuthorize';
 
 export default function ThemeRoutes() {
     const navigate = useNavigate();
+    const a = useSelector((state:any)=>{
+      console.log(state.authReducer)
+    })
     const isLoggedIn = useSelector(
         (state:any) => state.authReducer.isLoggedIn && state.authReducer.jwt !== null
       );

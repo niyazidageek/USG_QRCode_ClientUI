@@ -21,7 +21,7 @@ export const searchIssues = (input: any = "", jwt:any) => {
 };
 
 export const setActiveIssue = (id: any, jwt:any) => {
-  return httpClient.put(`issue/setactiveissue/${id}`,{
+  return httpClient.put(`issue/setactiveissue/${id}`,null,{
     headers:{
       Authorization:`Bearer ${jwt}`
     }

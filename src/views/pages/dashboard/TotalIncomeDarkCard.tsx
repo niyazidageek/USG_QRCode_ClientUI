@@ -20,6 +20,7 @@ import { useGetData } from "../../../hooks/useGetData";
 import { BOOKSCOUNT } from "../../../store/queryKeys";
 import { getBooksCount } from "../../../services/bookService";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const CardWrapper = styled(MainCard)(({ theme }: any) => ({
   backgroundColor: theme.palette.primary.dark,
@@ -50,11 +51,16 @@ const CardWrapper = styled(MainCard)(({ theme }: any) => ({
 
 const TotalIncomeDarkCard = () => {
   const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const alert = useAlert();
   const theme: any = useTheme();
-  const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
+  const { isLoading, data, isError, error, isFetching, refetch }:any = useGetData(
     BOOKSCOUNT,
     ()=>getBooksCount(jwt)
   );
+  
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   return (
     <>

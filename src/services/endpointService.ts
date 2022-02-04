@@ -32,7 +32,7 @@ export const createService = (data: any, jwt: any) => {
 };
 
 export const setActiveService = (id: any, jwt: any) => {
-  return httpClient.put(`serviceendpoint/setactiveserviceendpoint/${id}`, {
+  return httpClient.put(`serviceendpoint/setactiveserviceendpoint/${id}`, null,{
     headers: {
       Authorization: `Bearer ${jwt}`,
     },

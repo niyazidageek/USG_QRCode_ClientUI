@@ -19,6 +19,7 @@ import { getScans } from "../../../../services/scanService";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const columns: any = [
   { id: "deviceType", label: "Device", minWidth: 170 },
@@ -30,6 +31,7 @@ export default function ScansTable() {
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
+  const alert = useAlert()
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const navigate = useNavigate();
   const [page, setPage]: any = React.useState(
@@ -39,7 +41,7 @@ export default function ScansTable() {
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
   const [selectedIssue, setSelectedIssue] = React.useState(null);
 
-  const { isLoading, data, isError, error, isFetching, refetch, status } =
+  const { isLoading, data, isError, error, isFetching, refetch, status }:any =
     useQuery([SCANS, page, rowsPerPage, selectedIssue], () =>
       getScans(page, rowsPerPage, selectedIssue, jwt)
     );
@@ -59,6 +61,10 @@ export default function ScansTable() {
       setTotalCount(data?.headers["count"]);
     }
   }, [data]);
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   return (
     <Paper sx={{ width: "100%" }}>
@@ -92,7 +98,7 @@ export default function ScansTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
+            {isLoading||isError
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>

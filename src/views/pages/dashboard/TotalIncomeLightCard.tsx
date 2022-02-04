@@ -21,6 +21,7 @@ import { getActiveService } from "../../../services/endpointService";
 import { useGetData } from "../../../hooks/useGetData";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
+import { useAlert } from "react-alert";
 
 const CardWrapper = styled(MainCard)(({ color }) => ({
   overflow: "hidden",
@@ -47,12 +48,17 @@ const CardWrapper = styled(MainCard)(({ color }) => ({
 }));
 
 const TotalIncomeLightCard = () => {
+  const alert = useAlert()
   const theme: any = useTheme();
   const [color, setColor]: any = useState(theme.palette.success);
-  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
+  const { isLoading, data, isError, error, isFetching, refetch }:any = useQuery(
     ACTIVESERVICE,
     ()=>getActiveService()
   );
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   useEffect(() => {
     if (data?.status == 204) {

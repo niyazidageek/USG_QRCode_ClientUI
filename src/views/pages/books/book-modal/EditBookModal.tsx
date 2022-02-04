@@ -19,26 +19,23 @@ import SaveIcon from "@mui/icons-material/Save";
 import { Snackbar } from "@mui/material";
 import { BOOKS } from "../../../../store/queryKeys";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 export default function EditBookModal({ bookId, book }: any) {
   const [open, setOpen] = React.useState(false);
-  const [toastOpen, setToastOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(null);
+  const alert = useAlert();
   const jwt = useSelector((state: any) => state.authReducer.jwt);
 
   const queryClient = useQueryClient();
-
   const { mutate, isLoading, isError } = useMutation(
     (data: any) => editBook(bookId, data, jwt),
     {
       onSuccess: (data: any) => {
-        setMessage(data.data.message);
-        setToastOpen(true);
+        alert.show(data.data.message, {type:'success'})
         queryClient.invalidateQueries([BOOKS, bookId]);
       },
       onError: (err: any) => {
-        setToastOpen(true);
-        setMessage(err.message);
+        alert.show(err.response.data, {type:'error'})
       },
     }
   );
@@ -66,17 +63,6 @@ export default function EditBookModal({ bookId, book }: any) {
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={toastOpen}
-        autoHideDuration={1000}
-        onClose={() => {
-          setToastOpen(false);
-        }}
-        key={"top" + "center"}
-      >
-        <MuiAlert severity={isError ? "error" : "success"}>{message}</MuiAlert>
-      </Snackbar>
       <Button
         variant="contained"
         color={"warning"}

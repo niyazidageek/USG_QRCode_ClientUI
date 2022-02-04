@@ -1,4 +1,3 @@
-// material-ui
 import {
   Typography,
   Grid,
@@ -18,8 +17,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-
-// ==============================|| SAMPLE PAGE ||============================== //
 
 const ProfilePage = () => (
   <MainCard title="Profile">

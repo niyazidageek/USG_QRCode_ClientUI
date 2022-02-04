@@ -1,4 +1,3 @@
-// material-ui
 import {
     Typography,
     Grid,
@@ -9,8 +8,6 @@ import {
   } from "@mui/material";
   import MainCard from "../../../components/cards/MainCard";
   import BooksTable from "./books-table";
-
-  // ==============================|| SAMPLE PAGE ||============================== //
   
   const BooksPage = () => (
     <MainCard title="Books">

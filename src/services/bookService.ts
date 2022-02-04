@@ -41,7 +41,7 @@ export const getBooksCount = (jwt: any) => {
 };
 
 export const setActiveBook = (id: any, jwt: any) => {
-  return httpClient.put(`book/setactivebook/${id}`, {
+  return httpClient.put(`book/setactivebook/${id}`,null, {
     headers: {
       Authorization: `Bearer ${jwt}`,
     },

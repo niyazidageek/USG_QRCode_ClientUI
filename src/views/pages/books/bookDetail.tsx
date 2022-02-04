@@ -24,17 +24,26 @@ import { BookContext } from "../../../contexts/bookContext";
 import CloseIcon from "@mui/icons-material/Close";
 import { createContext, useEffect } from "react";
 import DeleteAlert from "./book-modal/DeleteAlert";
+import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 function BooksPage() {
   let { id } = useParams();
-  const { isLoading, data, isError, error, isFetching, refetch } =
-    useGetDataById(BOOKS, id, getBookById);
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const { isLoading, data, isError, error, isFetching, refetch }:any =
+    useGetDataById(BOOKS, id, () => getBookById(id, jwt));
+
+  const alert = useAlert();
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   return (
     <MainCard title="Book details">
       <Grid spacing={2} container>
         <Grid xs={12} md={6} item>
-          {isLoading ? (
+          {isLoading||isError ? (
             <Card />
           ) : (
             <SubCard
@@ -42,7 +51,7 @@ function BooksPage() {
               title={`Information about book #${data.id}`}
             >
               <Typography fontWeight={"bold"} py={2}>
-                Name:{" "}
+                Name:{" "}                   
                 <Typography display={"inline-block"}>{data.name}</Typography>
               </Typography>
               <Typography fontWeight={"bold"} py={2}>
@@ -111,8 +120,8 @@ function BooksPage() {
                 justifyContent={"end"}
                 display={"flex"}
               >
-                 <EditBookModal bookId={id} book={data} />
-               
+                <EditBookModal bookId={id} book={data} />
+
                 <DeleteAlert bookId={id} />
               </Box>
               <Box

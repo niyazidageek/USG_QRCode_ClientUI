@@ -14,14 +14,20 @@ import { useQueries, useQuery } from "react-query";
 import { SCANSTATISTICS } from "../../../store/queryKeys";
 import { getScanStatistics } from "../../../services/scanService";
 import { useChart } from "../../../hooks/useChart";
+import { useAlert } from "react-alert";
 
 const TotalGrowthBarChart = ({ count, isLoadingCount }: any) => {
   const [year, setYear] = useState(null);
   const jwt = useSelector((state: any) => state.authReducer.jwt);
-  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
+  const alert = useAlert()
+  const { isLoading, data, isError, error, isFetching, refetch }:any= useQuery(
     [SCANSTATISTICS],
     () => getScanStatistics(year, jwt)
   );
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   useEffect(() => {
     refetch();
@@ -35,7 +41,7 @@ const TotalGrowthBarChart = ({ count, isLoadingCount }: any) => {
 
   return (
     <>
-      {!chart ? (
+      {!chart || isError ? (
         <SkeletonTotalGrowthBarChart />
       ) : (
         <MainCard>

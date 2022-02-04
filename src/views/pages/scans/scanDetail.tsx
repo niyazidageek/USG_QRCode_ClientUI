@@ -21,17 +21,25 @@ import CloseIcon from "@mui/icons-material/Close";
 import DeleteAlert from "./scan-modal/DeleteAlert";
 import moment from "moment";
 import { getScanById } from "../../../services/scanService";
+import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 function ScanPage() {
   let { id } = useParams();
-  const { isLoading, data, isError, error, isFetching, refetch } =
-    useGetDataById(SCANS, id, getScanById);
+  const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const alert = useAlert();
+  const { isLoading, data, isError, error, isFetching, refetch }:any =
+    useGetDataById(SCANS, id, ()=>getScanById(id, jwt));
+
+    if(error){
+      alert.show(error.response.data, {type:'error'})
+    }
 
   return (
     <MainCard title="Scan details">
       <Grid spacing={2} container>
         <Grid xs={12} md={6} item>
-          {isLoading ? (
+          {isLoading||isError ? (
             <Card />
           ) : (
             <SubCard

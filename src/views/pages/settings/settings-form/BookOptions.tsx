@@ -15,15 +15,21 @@ import { useGetData } from "../../../../hooks/useGetData";
 import { useSearchBooks } from "../../../../hooks/useSearchBooks";
 import BookSearch from "./BookSearchBar";
 import { useSelector } from "react-redux";
-
+import { useAlert } from "react-alert";
 
 export default function BookOptions() {
   const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const alert = useAlert();
 
-    const {isLoading, data ,isError, error, isFetching, refetch} = useGetData(ACTIVEBOOK, ()=>getActiveBook(jwt));
+  const { isLoading, data, isError, error, isFetching, refetch }: any =
+    useGetData(ACTIVEBOOK, () => getActiveBook(jwt));
+
+  if (error) {
+    alert.show(error.response.data);
+  }
   return (
     <>
-      {isLoading ? (
+      {isLoading || isError ? (
         <Card />
       ) : (
         <SubCard title="Active Book">

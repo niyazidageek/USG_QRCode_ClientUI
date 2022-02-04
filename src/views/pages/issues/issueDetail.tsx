@@ -22,17 +22,23 @@ import {
 import { getIssueById } from "../../../services/issueService";
 import moment from "moment";
 import EditIssueModal from "./issue-modal/EditIssueModal";
+import { useAlert } from "react-alert";
   
   function IssuePage() {
     let { id } = useParams();
-    const { isLoading, data, isError, error, isFetching, refetch } =
+    const alert = useAlert()
+    const { isLoading, data, isError, error, isFetching, refetch }:any =
       useGetDataById(ISSUES, id, getIssueById);
   
+    if(error){
+      alert.show(error.response.data, {type:'error'})
+    }
+
     return (
       <MainCard title="Issue details">
         <Grid spacing={2} container>
           <Grid xs={12} md={6} item>
-            {isLoading ? (
+            {isLoading||isError ? (
               <Card />
             ) : (
               <SubCard

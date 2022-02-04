@@ -25,6 +25,7 @@ import { useQueries } from "react-query";
 import { useLineMonthsChart } from "../../../hooks/useLineMonthsChart";
 import { useLineYearsChart } from "../../../hooks/useLineYearsChart";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const CardWrapper = styled(MainCard)(({ theme }: any) => ({
   backgroundColor: theme.palette.primary.dark,
@@ -68,8 +69,6 @@ const CardWrapper = styled(MainCard)(({ theme }: any) => ({
   },
 }));
 
-// ==============================|| DASHBOARD - TOTAL ORDER LINE CHART CARD ||============================== //
-
 const TotalOrderLineChartCard = () => {
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const theme: any = useTheme();
@@ -77,11 +76,13 @@ const TotalOrderLineChartCard = () => {
   const handleChangeTime = (event: any, newValue: any) => {
     setTimeValue(newValue);
   };
+  const alert = useAlert();
 
-  const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
+  const { isLoading, data, isError, error, isFetching, refetch }:any = useGetData(
     ISSUESCOUNT,
     ()=>getIssuesCount(jwt)
   );
+
 
   const results = useQueries([
     {
@@ -93,6 +94,11 @@ const TotalOrderLineChartCard = () => {
       queryFn: () => getAllIssueStatistics(jwt),
     },
   ]);
+
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   const monthsChart = useLineMonthsChart(results[0]?.data?.data);
   const yearsChart = useLineYearsChart(results[1]?.data?.data);

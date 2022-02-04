@@ -23,6 +23,7 @@ import { useQuery } from "react-query";
 import { CLIENTS } from "../../../../store/queryKeys";
 import { getClients } from "../../../../services/clientService";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 
 
@@ -36,10 +37,11 @@ export default function ClientsTable() {
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
   );
+  const alert = useAlert()
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
-  const { isLoading, data, isError, error, isFetching, refetch, status } =
+  const { isLoading, data, isError, error, isFetching, refetch, status }:any =
     useQuery([CLIENTS, page, rowsPerPage], () => getClients(page, rowsPerPage, jwt));
   const navigate = useNavigate();
   const handleChangePage = (event: any, newPage: any) => {
@@ -57,6 +59,10 @@ export default function ClientsTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
 
   return (
@@ -80,7 +86,7 @@ export default function ClientsTable() {
           </TableHead>
           <TableBody>
             {
-              isLoading
+              isLoading||isError
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>

@@ -21,6 +21,7 @@ import { ISSUES } from "../../../../store/queryKeys";
 import { useQuery } from "react-query";
 import { getIssues } from "../../../../services/issueService";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const columns: any = [
   { id: "name", label: "Name", minWidth: 170 },
@@ -35,13 +36,14 @@ export default function IssuesTable() {
   const queryPage: any = searchParams.get("page");
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const navigate = useNavigate();
+  const alert = useAlert();
   const [page, setPage]: any = React.useState(
     isInteger(queryPage) ? parseInt(queryPage) : 0
   );
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
 
-  const { isLoading, data, isError, error, isFetching, refetch, status } =
+  const { isLoading, data, isError, error, isFetching, refetch, status }:any =
     useQuery([ISSUES, page, rowsPerPage], () => getIssues(page, rowsPerPage, jwt));
 
   const handleChangePage = (event: any, newPage: any) => {
@@ -53,6 +55,10 @@ export default function IssuesTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   React.useEffect(() => {
     if (data?.headers["count"]) {
@@ -86,7 +92,7 @@ export default function IssuesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
+            {isLoading||isError
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>

@@ -5,19 +5,15 @@ import { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Button, CardActions, CardContent, Divider, Grid, Menu, MenuItem, Typography } from '@mui/material';
 
-// project imports
 import BajajAreaChartCard from './BajajAreaChartCard';
 import MainCard from '../../../components/cards/MainCard';
 import SkeletonPopularCard from '../../../components/cards/skeleton/PopularCard';
 import { gridSpacing } from '../../../store/constants';
-
-// assets
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import KeyboardArrowUpOutlinedIcon from '@mui/icons-material/KeyboardArrowUpOutlined';
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 
-// ==============================|| DASHBOARD DEFAULT - POPULAR CARD ||============================== //
 
 const PopularCard = ({ isLoading }:any) => {
     const theme:any = useTheme();

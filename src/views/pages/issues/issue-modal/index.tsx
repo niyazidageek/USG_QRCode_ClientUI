@@ -24,11 +24,11 @@ import moment from "moment";
 import { issueSchema } from "../../../../validations/issueSchema";
 import { createIssue } from "../../../../services/issueService";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 export default function IssueModal() {
   const [open, setOpen] = React.useState(false);
-  const [toastOpen, setToastOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(null);
+  const alert = useAlert();
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const queryClient = useQueryClient();
 
@@ -36,14 +36,12 @@ export default function IssueModal() {
     (data:any)=>createIssue(data, jwt),
     {
       onSuccess: (data: any) => {
-        setMessage(data.data.message);
-        setToastOpen(true);
+        alert.show(data.data.message, {type:'success'})
         queryClient.invalidateQueries([ISSUES]);
         setOpen(false)
       },
       onError: (err: any) => {
-        setToastOpen(true);
-        setMessage(err.message);
+        alert.show(err.response.data, {type:'success'})
       },
     }
   );
@@ -60,7 +58,6 @@ export default function IssueModal() {
       for (var key in values) {
         form_data.append(key, values[key]);
       }
-      console.log(form_data)
       mutate(form_data);
     },
   });
@@ -75,17 +72,6 @@ export default function IssueModal() {
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={toastOpen}
-        autoHideDuration={1000}
-        onClose={() => {
-          setToastOpen(false);
-        }}
-        key={"top" + "center"}
-      >
-        <MuiAlert severity={isError ? "error" : "success"}>{message}</MuiAlert>
-      </Snackbar>
       <Button
         variant="contained"
         color={"success"}

@@ -1,8 +1,9 @@
 import { useQuery } from "react-query";
-import axios from "axios";
+import { useSelector } from "react-redux";
 
 export const useGetDataById = (queryKey:string, id:any, promiseFunc:any) => {
-  return useQuery([queryKey, id], ()=>promiseFunc(id), {
+  const jwt = useSelector((state:any)=>state.authReducer.jwt)
+  return useQuery([queryKey, id], ()=>promiseFunc(id, jwt), {
     select: (data:any) => {
       return data.data;
     },

@@ -24,6 +24,7 @@ import { getServices } from "../../../../services/endpointService";
 import EditServiceModal from "../service-modal/EditServiceModal";
 import DeleteAlert from "../service-modal/DeleteAlert";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const columns: any = [
   { id: "description", label: "Description", minWidth: 170 },
@@ -98,6 +99,7 @@ function Row(props: any) {
 
 export default function ServicesTable() {
   const { search } = useLocation();
+  const alert = useAlert()
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
@@ -108,9 +110,9 @@ export default function ServicesTable() {
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
 
-  const { isLoading, data, isError, error, isFetching, refetch, status } =
+  const { isLoading, data, isError, error, isFetching, refetch, status }:any =
     useQuery([SERVICES, page, rowsPerPage], () =>
-      getServices(page, rowsPerPage, jwt)
+      getServices(jwt,page, rowsPerPage)
     );
 
   const handleChangePage = (event: any, newPage: any) => {
@@ -127,6 +129,10 @@ export default function ServicesTable() {
       setTotalCount(data?.headers["count"]);
     }
   }, [data]);
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
 
   return (
@@ -148,7 +154,7 @@ export default function ServicesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading? (
+            {isLoading||isError? (
               [...Array(rowsPerPage)].map((x, i) => {
                 return (
                   <TableRow>

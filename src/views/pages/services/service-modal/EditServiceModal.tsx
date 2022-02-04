@@ -21,11 +21,11 @@ import {SERVICES } from "../../../../store/queryKeys";
 import { editService } from "../../../../services/endpointService";
 import { serviceSchema } from "../../../../validations/serviceSchema";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 export default function EditServiceModal({ serviceId, service }: any) {
   const [open, setOpen] = React.useState(false);
-  const [toastOpen, setToastOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(null);
+  const alert = useAlert()
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const queryClient = useQueryClient();
 
@@ -33,13 +33,11 @@ export default function EditServiceModal({ serviceId, service }: any) {
     (data: any) => editService(serviceId, data, jwt),
     {
       onSuccess: (data: any) => {
-        setMessage(data.data.message);
-        setToastOpen(true);
+        alert.show(data.data.message, {type:'success'})
         queryClient.invalidateQueries([SERVICES]);
       },
       onError: (err: any) => {
-        setToastOpen(true);
-        setMessage(err.message);
+        alert.show(err.response.data, {type:'error'})
       },
     }
   );
@@ -66,17 +64,6 @@ export default function EditServiceModal({ serviceId, service }: any) {
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={toastOpen}
-        autoHideDuration={1000}
-        onClose={() => {
-          setToastOpen(false);
-        }}
-        key={"top" + "center"}
-      >
-        <MuiAlert severity={isError ? "error" : "success"}>{message}</MuiAlert>
-      </Snackbar>
       <Button
         variant="contained"
         color={"warning"}

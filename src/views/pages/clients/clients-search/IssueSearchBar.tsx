@@ -18,10 +18,12 @@ import { useMutation, useQueryClient } from "react-query";
 import { FormHelperText } from "@mui/material";
 import { RandomClientModal } from "../clients-modal/randomClientModal";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 export default function IssueSearchBar() {
 
   const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const alert = useAlert()
 
   const { isLoading, data, isError, error, isFetching, refetch } = useGetData(
     ACTIVEISSUE,
@@ -47,9 +49,7 @@ export default function IssueSearchBar() {
       setOpen(()=>true)
     },
     onError: (err: any) => {
-      // setToastOpen(true);
-      // setMessage(err.message);
-      console.log("s");
+      alert.show(err.response.data, {type:'error'})
     },
   });
 

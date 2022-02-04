@@ -22,6 +22,7 @@ import { useGetData } from "../../../../hooks/useGetData";
 import { useQuery } from "react-query";
 import { isInteger } from "formik";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const columns: any = [
   { id: "name", label: "Name", minWidth: 100 },
@@ -31,6 +32,7 @@ const columns: any = [
 
 export default function ServicesTable() {
   const { search } = useLocation();
+  const alert = useAlert();
   const searchParams = new URLSearchParams(search);
   const queryPage: any = searchParams.get("page");
   const jwt = useSelector((state: any) => state.authReducer.jwt);
@@ -39,7 +41,7 @@ export default function ServicesTable() {
   );
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
-  const { isLoading, data, isError, error, isFetching, refetch, status } =
+  const { isLoading, data, isError, error, isFetching, refetch, status }:any =
     useQuery([BOOKS, page, rowsPerPage], () => getBooks(page, rowsPerPage, jwt));
   const navigate = useNavigate();
   const handleChangePage = (event: any, newPage: any) => {
@@ -57,6 +59,10 @@ export default function ServicesTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  if(error){
+    alert.show(error.response.data, {type:'error'})
+  }
 
   return (
     <Paper sx={{ width: "100%" }}>
@@ -80,7 +86,7 @@ export default function ServicesTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
+            {isLoading || isError
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>

@@ -32,17 +32,18 @@ import { signInSchema } from "../../../../validations/loginSchema";
 import { useMutation } from "react-query";
 import { login } from "../../../../services/authService";
 import { loginAction } from "../../../../redux/actions/authActions";
+import { useAlert } from "react-alert";
 
 const FirebaseLogin = () => {
   const theme: any = useTheme();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [error, setError] = useState(null)
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const alert = useAlert();
 
   const handleMouseDownPassword = (event: any) => {
     event.preventDefault();
@@ -54,9 +55,7 @@ const FirebaseLogin = () => {
       dispatch(loginAction(data.data))
     },
     onError:(err:any)=>{
-      setOpen(true)
-      setError(err.message)
-
+      alert.show(err.response.data, {type:'error'})
     }
   });
 
@@ -73,17 +72,6 @@ const FirebaseLogin = () => {
 
   return (
     <>
-      <Snackbar
-        anchorOrigin={{ vertical:'top', horizontal:'center' }}
-        open={open} 
-        autoHideDuration={1000}
-        onClose={()=>{
-          setOpen(false)  
-        }}
-        key={'top' + 'center'}
-      >
-      <MuiAlert severity="error">{error}</MuiAlert>
-      </Snackbar>
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid
           item

@@ -17,6 +17,7 @@ import { CLIENTSCANS } from "../../../../store/queryKeys";
 import { useQuery } from "react-query";
 import { getScansByClient } from "../../../../services/scanService";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const columns: any = [
   { id: "deviceType", label: "Device", minWidth: 100 },
@@ -28,6 +29,7 @@ export default function ScansTable({ clientId }: any) {
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
+  const alert = useAlert()
   const queryPage: any = searchParams.get("page");
 
   const navigate = useNavigate();
@@ -37,10 +39,14 @@ export default function ScansTable({ clientId }: any) {
   const [totalCount, setTotalCount] = React.useState(0);
   const [rowsPerPage, setRowsPerPage]: any = React.useState(5);
 
-  const { isLoading, data, isError, error, isFetching, refetch, status } =
+  const { isLoading, data, isError, error, isFetching, refetch, status }:any =
     useQuery([CLIENTSCANS, clientId, page, rowsPerPage], () =>
       getScansByClient(clientId, page, rowsPerPage, jwt)
     );
+
+    if(error){
+      alert.show(error.response.data, {type:'error'})
+    }
 
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
@@ -76,7 +82,7 @@ export default function ScansTable({ clientId }: any) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
+            {isLoading||isError
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>

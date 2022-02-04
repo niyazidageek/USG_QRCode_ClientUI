@@ -6,40 +6,34 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { FormHelperText, Grid, InputLabel, OutlinedInput } from "@mui/material";
-import { Typography, FormControl, FormControlLabel } from "@mui/material";
+import {  Grid, } from "@mui/material";
+import { Typography } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { useFormik } from "formik";
-import { createContext } from "react";
 import { bookSchema } from "../../../../validations/bookSchema";
 import { useMutation, useQueryClient } from "react-query";
-import { createBook, editBook } from "../../../../services/bookService";
-import MuiAlert from "@mui/material/Alert";
-import SaveIcon from "@mui/icons-material/Save";
-import { Snackbar } from "@mui/material";
+import { createBook } from "../../../../services/bookService";
+import SaveIcon from "@mui/icons-material/Save"
 import { BOOKS } from "../../../../store/queryKeys";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 export default function AddBookModal() {
   const [open, setOpen] = React.useState(false);
-  const [toastOpen, setToastOpen] = React.useState(false);
-  const [message, setMessage] = React.useState(null);
   const jwt = useSelector((state: any) => state.authReducer.jwt);
-
+  const alert = useAlert();
   const queryClient = useQueryClient();
 
   const { mutate, isLoading, isError } = useMutation(
     (data:any)=>createBook(data, jwt),
     {
       onSuccess: (data: any) => {
-        setMessage(data.data.message);
-        setToastOpen(true);
+        alert.show(data.data.message, {type:'success'})
         queryClient.invalidateQueries([BOOKS]);
         setOpen(false);
       },
       onError: (err: any) => {
-        setToastOpen(true);
-        setMessage(err.message);
+        alert.show(err.response.data, {type:'error'})
       },
     }
   );
@@ -66,17 +60,6 @@ export default function AddBookModal() {
 
   return (
     <div>
-      <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={toastOpen}
-        autoHideDuration={1000}
-        onClose={() => {
-          setToastOpen(false);
-        }}
-        key={"top" + "center"}
-      >
-        <MuiAlert severity={isError ? "error" : "success"}>{message}</MuiAlert>
-      </Snackbar>
       <Button
         variant="contained"
         color={"success"}

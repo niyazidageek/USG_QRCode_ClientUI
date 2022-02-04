@@ -44,8 +44,6 @@ export default function IssuesSearch({setSelectedIssue}:any) {
   };
 
   return (
-
-    
     <Autocomplete
       style={{width:'50%'}}
       onChange={(e: any, value: any) => value&&handleChange(value.id)}

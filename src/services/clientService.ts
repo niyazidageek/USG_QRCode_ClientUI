@@ -17,7 +17,7 @@ export const getRandomClient = (issueId: any, jwt: any) => {
 };
 
 export const getClients = (page: any = 0, size: any = 3, jwt: any) => {
-  return httpClient.get(`client/clients?page=${page}&size=${size}`, {
+  return httpClient.get(`client/clients?page=${page}&size=${size}`,{
     headers: {
       Authorization: `Bearer ${jwt}`,
     },

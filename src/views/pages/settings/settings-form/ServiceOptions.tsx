@@ -10,42 +10,50 @@ import {
 } from "@mui/material";
 import SubCard from "../../../../components/cards/SubCard";
 import { ACTIVESERVICE, SERVICEOPTIONS } from "../../../../store/queryKeys";
-import { getActiveService, getServices } from "../../../../services/endpointService";
+import {
+  getActiveService,
+  getServices,
+} from "../../../../services/endpointService";
 import { useSetActiveService } from "../../../../hooks/useSetActiveService";
-import { useQueries } from "react-query";
+import { isError, useQueries } from "react-query";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 export default function ServiceOptions() {
-
   const jwt = useSelector((state: any) => state.authReducer.jwt);
+  const alert = useAlert();
 
   const results = useQueries([
     {
       queryKey: [ACTIVESERVICE],
-      queryFn: () => getActiveService()
+      queryFn: () => getActiveService(),
     },
     {
       queryKey: [SERVICEOPTIONS],
-      queryFn: () => getServices(jwt)
+      queryFn: () => getServices(jwt),
     },
   ]);
 
+  const { mutate } = useSetActiveService();
 
-  const {mutate} = useSetActiveService();
+  const isLoading = results.some((result) => result.isLoading);
+  const isError = results.some((result) => result.isError);
 
-  const isLoading = results.some(result => result.isLoading)
+  const services = results[1].data?.data;
+  const activeService =
+    results[0].data?.status == 204 ? null : results[0].data?.data;
 
-  const services = results[1].data?.data
-  const activeService = results[0].data?.status == 204 ? null : results[0].data?.data
+  if (results.some((result) => result.error))
+    results.forEach((res: any) => {
+      res.error && alert.show(res.error.response.data, { type: "error" });
+    });
 
-
-
-  function handleChange(id:any){
+  function handleChange(id: any) {
     mutate(id);
   }
 
   return (
     <>
-      {isLoading ? (
+      {isLoading || isError ? (
         <Card />
       ) : (
         <SubCard title="Active Service">
@@ -56,8 +64,8 @@ export default function ServiceOptions() {
               id="demo-simple-select"
               label="Service"
               defaultChecked
-              defaultValue={activeService ? activeService.id : ''}
-              onChange={(e)=>handleChange(e.target.value)}
+              defaultValue={activeService ? activeService.id : ""}
+              onChange={(e) => handleChange(e.target.value)}
             >
               {services.length != 0 ? (
                 services.map((s: any) => (
