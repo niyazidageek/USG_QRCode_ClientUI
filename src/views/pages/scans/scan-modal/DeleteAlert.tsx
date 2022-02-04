@@ -35,7 +35,7 @@ export default function DeleteAlert({ scanId }: any) {
       navigate("/scans");
     },
     onError: (err: any) => {
-      alert.show(err.response.data, {type:'error'})
+      alert.show(err.response.data.message, {type:'error'})
     },
   });
 

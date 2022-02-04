@@ -36,7 +36,7 @@ function BooksPage() {
   const alert = useAlert();
 
   if(error){
-    alert.show(error.response.data, {type:'error'})
+    alert.show(error.response.data.message, {type:'error'})
   }
 
   return (

@@ -97,7 +97,7 @@ const TotalOrderLineChartCard = () => {
 
 
   if(error){
-    alert.show(error.response.data, {type:'error'})
+    alert.show(error.response.data.message, {type:'error'})
   }
 
   const monthsChart = useLineMonthsChart(results[0]?.data?.data);

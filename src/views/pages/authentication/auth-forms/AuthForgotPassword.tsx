@@ -1,133 +1,120 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Snackbar } from "@mui/material";
+import MuiAlert from '@mui/material/Alert';
 // material-ui
-import { useTheme } from '@mui/material/styles';
+import { useTheme } from "@mui/material/styles";
 import {
-    Box,
-    Button,
-    Checkbox,
-    Divider,
-    FormControl,
-    FormControlLabel,
-    FormHelperText,
-    Grid,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    OutlinedInput,
-    Stack,
-    Typography,
-    useMediaQuery
-} from '@mui/material';
-
-// third party
-import * as Yup from 'yup';
-import { Formik } from 'formik';
-
-// project imports
-
-// import AnimateButton from './components/extended/AnimateButton';
-import AnimateButton from '../../../../components/extended/AnimateButton'
-
-// assets
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
+import { useFormik } from "formik";
+import AnimateButton from "../../../../components/extended/AnimateButton";
+import { useMutation } from "react-query";
+import { forgotPassword, login } from "../../../../services/authService";
+import { useAlert } from "react-alert";
+import { forgotPasswordSchema } from "../../../../validations/forgotPasswordSchema";
+import { useNavigate } from "react-router-dom";
 
 
-// ============================|| FIREBASE - LOGIN ||============================ //
+const FirebaseLogin = () => {
+  const theme: any = useTheme();
+  const alert = useAlert();
+    const navigate = useNavigate();
 
-const FirebaseLogin = ({ ...others }) => {
-    const theme:any = useTheme();
+  const { mutate, isLoading, isError } = useMutation(forgotPassword, {
+    onSuccess: (data:any) => {
+        alert.show(data.data.message, {type:'success'})
+    },
+    onError:(err:any)=>{
+      alert.show(err.response.data.message, {type:'error'})
+    }
+  });
 
-    const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
-    const customization = useSelector((state:any) => state.customization);
-    const [checked, setChecked] = useState(true);
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+    },
+    validationSchema: forgotPasswordSchema,
+    onSubmit: (values) => {
+      mutate(values);
+    },
+  });
 
-    const googleHandler = async () => {
-        console.error('Login');
-    };
+  return (
+    <>
+      <form onSubmit={formik.handleSubmit}>
+        <FormControl
+          fullWidth
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          sx={{ ...theme.typography.customInput }}
+        >
+          <InputLabel htmlFor="outlined-adornment-email-login">
+            Email Address
+          </InputLabel>
+          <OutlinedInput
+            type="email"
+            onChange={formik.handleChange}
+            name="email"
+            label="Email Address"
+            onBlur={formik.handleBlur}
+            inputProps={{}}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <FormHelperText error id="standard-weight-helper-text-email-login">
+              {formik.errors.email}
+            </FormHelperText>
+          )}
+        </FormControl>
+      
 
-    const [showPassword, setShowPassword] = useState(false);
-    const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const handleMouseDownPassword = (event:any) => {
-        event.preventDefault();
-    };
-
-    return (
-        <>
-            <Grid container direction="column" justifyContent="center" spacing={2}>
-               
-                <Grid item xs={12}>
-                   
-                </Grid>
-                <Grid item xs={12} container alignItems="center" justifyContent="center">
-                    <Box sx={{ mb: 2 }}>
-                        <Typography variant="subtitle1">Enter your email address</Typography>
-                    </Box>
-                </Grid>
-            </Grid>
-
-            <Formik
-                initialValues={{
-                    email: 'info@codedthemes.com',
-                    password: '123456',
-                    submit: null
-                }}
-                validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                    password: Yup.string().max(255).required('Password is required')
-                })}
-                onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
-                    
-                }}
+        <Box sx={{ mt: 2 }}>
+          <AnimateButton>
+            <Button
+              disableElevation
+              disabled={isLoading}
+              fullWidth
+              size="large"
+              type="submit"
+              variant="contained"
+              color="secondary"
             >
-                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
-                    <form noValidate onSubmit={handleSubmit} {...others}>
-                        <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
-                            <OutlinedInput
-                                id="outlined-adornment-email-login"
-                                type="email"
-                                value={values.email}
-                                name="email"
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                label="Email Address / Username"
-                                inputProps={{}}
-                            />
-                            {touched.email && errors.email && (
-                                <FormHelperText error id="standard-weight-helper-text-email-login">
-                                    {errors.email}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
-
-                      
-
-                        <Box sx={{ mt: 2 }}>
-                            <AnimateButton>
-                                <Button
-                                    disableElevation
-                                    disabled={isSubmitting}
-                                    fullWidth
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    Submit
-                                </Button>
-                            </AnimateButton>
-                        </Box>
-                    </form>
-                )}
-            </Formik>
-        </>
-    );
+              Submit
+            </Button>
+          </AnimateButton>
+        </Box>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          spacing={1}
+        >
+          
+          <Typography
+            onClick={()=>navigate(-1)}
+            variant="subtitle1"
+            color="secondary"
+            sx={{ textDecoration: "none", cursor: "pointer", mt:'15px' }}
+          >
+              Go back
+          </Typography>
+        </Stack>
+      </form>
+    </>
+  );
 };
 
 export default FirebaseLogin;

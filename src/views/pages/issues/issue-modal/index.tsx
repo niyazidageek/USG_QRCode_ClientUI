@@ -41,7 +41,7 @@ export default function IssueModal() {
         setOpen(false)
       },
       onError: (err: any) => {
-        alert.show(err.response.data, {type:'success'})
+        alert.show(err.response.data.message, {type:'success'})
       },
     }
   );

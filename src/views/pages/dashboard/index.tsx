@@ -28,7 +28,7 @@ const Dashboard = () => {
   },[isLoading, isFetching])
 
   if(error){
-    alert.show(error.response.data, {type:'error'})
+    alert.show(error.response.data.message, {type:'error'})
   }
 
   return (

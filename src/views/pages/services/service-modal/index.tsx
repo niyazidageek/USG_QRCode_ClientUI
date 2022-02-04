@@ -36,7 +36,7 @@ export default function ServiceModal() {
         queryClient.invalidateQueries([SERVICES]);
       },
       onError: (err: any) => {
-        alert.show(err.response.data, {type:'error'})
+        alert.show(err.response.data.message, {type:'error'})
       },
     }
   );

@@ -31,7 +31,7 @@ import { useAlert } from "react-alert";
       useGetDataById(ISSUES, id, getIssueById);
   
     if(error){
-      alert.show(error.response.data, {type:'error'})
+      alert.show(error.response.data.message, {type:'error'})
     }
 
     return (

@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Snackbar } from "@mui/material";
-import MuiAlert from '@mui/material/Alert';
-// material-ui
+import MuiAlert from "@mui/material/Alert";
+import ReactPinField from "react-pin-field";
 import { useTheme } from "@mui/material/styles";
 import {
   Box,
@@ -21,25 +21,25 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-
 import { useFormik } from "formik";
-
 import AnimateButton from "../../../../components/extended/AnimateButton";
-// assets
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { signInSchema } from "../../../../validations/loginSchema";
 import { useMutation } from "react-query";
-import { login } from "../../../../services/authService";
-import { loginAction } from "../../../../redux/actions/authActions";
+import { login, resetPassword } from "../../../../services/authService";
+import {
+  loginAction,
+  logOutAction,
+} from "../../../../redux/actions/authActions";
 import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
+import { resetPasswordSchema } from "../../../../validations/resetPasswordSchema";
 
-const FirebaseLogin = () => {
+const ResetPasswordForm = () => {
   const theme: any = useTheme();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -51,45 +51,33 @@ const FirebaseLogin = () => {
     event.preventDefault();
   };
 
-  const { mutate, isLoading, isError } = useMutation(login, {
-    onSuccess: (data:any) => {
-      data.data = {...data.data, ...{rememberMe:rememberMe}}
-      dispatch(loginAction(data.data))
+  const { mutate, isLoading, isError } = useMutation(resetPassword, {
+    onSuccess: (data: any) => {
+      alert.show(data.data.message, { type: "success" });
+      dispatch(logOutAction);
+      navigate("../login");
     },
-    onError:(err:any)=>{
-      alert.show(err.response.data.message, {type:'error'})
-    }
+    onError: (err: any) => {
+      alert.show(err.response.data.message, { type: "error" });
+    },
   });
 
   const formik = useFormik({
     initialValues: {
       email: "",
-      password: "",
+      newPassword: "",
+      confirmNewPassword: "",
+      token: "",
     },
-    validationSchema: signInSchema,
-    onSubmit: (values) => {
+    validationSchema: resetPasswordSchema,
+    onSubmit: (values?: any) => {
+      delete values.confirmNewPassword;
       mutate(values);
     },
   });
 
   return (
     <>
-      <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid
-          item
-          xs={12}
-          container
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">
-              Sign in with Email address
-            </Typography>
-          </Box>
-        </Grid>
-      </Grid>
-
       <form onSubmit={formik.handleSubmit}>
         <FormControl
           fullWidth
@@ -115,16 +103,18 @@ const FirebaseLogin = () => {
         </FormControl>
         <FormControl
           fullWidth
-          error={formik.touched.password && Boolean(formik.errors.password)}
+          error={
+            formik.touched.newPassword && Boolean(formik.errors.newPassword)
+          }
           sx={{ ...theme.typography.customInput }}
         >
           <InputLabel htmlFor="outlined-adornment-password-login">
-            Password
+            New password
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password-login"
             type={showPassword ? "text" : "password"}
-            name="password"
+            name="newPassword"
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             endAdornment={
@@ -140,45 +130,72 @@ const FirebaseLogin = () => {
                 </IconButton>
               </InputAdornment>
             }
-            label="Password"
+            label="New Password"
             inputProps={{}}
           />
-          {formik.touched.password && Boolean(formik.errors.password) && (
+          {formik.touched.newPassword && Boolean(formik.errors.newPassword) && (
             <FormHelperText
               error
               id="standard-weight-helper-text-password-login"
             >
-              {formik.errors.password}
+              {formik.errors.newPassword}
             </FormHelperText>
           )}
         </FormControl>
 
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          spacing={1}
+        <FormControl
+          fullWidth
+          error={
+            formik.touched.confirmNewPassword &&
+            Boolean(formik.errors.confirmNewPassword)
+          }
+          sx={{ ...theme.typography.customInput }}
         >
-          <FormControlLabel
-            control={
-              <Checkbox
-                defaultChecked={rememberMe}
-                onChange={(event) => setRememberMe(() => event.target.checked)}
-                name="checked"
-                color="primary"
-              />
-            }
-            label="Remember me"
+          <InputLabel htmlFor="outlined-adornment-password-login">
+            Confirm new password
+          </InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password-login"
+            type={showPassword ? "text" : "password"}
+            name="confirmNewPassword"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            label="Confirm new password"
+            inputProps={{}}
           />
-          <Typography
-            onClick={()=>navigate("../forgotpassword")}
-            variant="subtitle1"
-            color="secondary"
-            sx={{ textDecoration: "none", cursor: "pointer" }}
-          >
-            Forgot Password?
-          </Typography>
-        </Stack>
+          {formik.touched.confirmNewPassword &&
+            Boolean(formik.errors.confirmNewPassword) && (
+              <FormHelperText
+                error
+                id="standard-weight-helper-text-password-login"
+              >
+                {formik.errors.confirmNewPassword}
+              </FormHelperText>
+            )}
+        </FormControl>
+
+        <FormControl
+          fullWidth
+          error={formik.touched.token && Boolean(formik.errors.token)}
+          sx={{ ...theme.typography.customInput }}
+        >
+          <ReactPinField
+            name="token"
+            validate={new RegExp("^[0-9]+$")}
+            className="pin-field"
+            type={"text"}
+            length={6}
+            onChange={(e: any) => formik.setFieldValue("token", e)}
+          />
+          {formik.touched.token && Boolean(formik.errors.token) && (
+            <FormHelperText
+              error
+              id="standard-weight-helper-text-password-login"
+            >
+              {formik.errors.token}
+            </FormHelperText>
+          )}
+        </FormControl>
 
         <Box sx={{ mt: 2 }}>
           <AnimateButton>
@@ -191,13 +208,28 @@ const FirebaseLogin = () => {
               variant="contained"
               color="secondary"
             >
-              Sign in
+              Reset
             </Button>
           </AnimateButton>
         </Box>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+          spacing={1}
+        >
+          <Typography
+            onClick={() => navigate(-1)}
+            variant="subtitle1"
+            color="secondary"
+            sx={{ textDecoration: "none", cursor: "pointer", mt: "15px" }}
+          >
+            Go back
+          </Typography>
+        </Stack>
       </form>
     </>
   );
 };
 
-export default FirebaseLogin;
+export default ResetPasswordForm;

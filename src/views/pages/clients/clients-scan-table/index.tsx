@@ -45,7 +45,7 @@ export default function ScansTable({ clientId }: any) {
     );
 
     if(error){
-      alert.show(error.response.data, {type:'error'})
+      alert.show(error.response.data.message, {type:'error'})
     }
 
   const handleChangePage = (event: any, newPage: any) => {
@@ -86,7 +86,7 @@ export default function ScansTable({ clientId }: any) {
               ? [...Array(rowsPerPage)].map((x, i) => {
                   return (
                     <TableRow>
-                      {[...Array(2)].map((x, i) => (
+                      {[...Array(3)].map((x, i) => (
                         <TableCell>
                           <RowSkeleton />
                         </TableCell>

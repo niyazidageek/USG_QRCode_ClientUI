@@ -44,7 +44,7 @@ export default function ServiceOptions() {
 
   if (results.some((result) => result.error))
     results.forEach((res: any) => {
-      res.error && alert.show(res.error.response.data, { type: "error" });
+      res.error && alert.show(res.error.response.data.message, { type: "error" });
     });
 
   function handleChange(id: any) {

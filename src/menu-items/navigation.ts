@@ -80,14 +80,6 @@ const navigation = {
             url: '/scans',
             icon: icons.QrCodeScannerIcon,
             breadcrumbs: false
-        },
-        {
-            id: 'profile-page',
-            title: 'Profile',
-            type: 'item',
-            url: '/profile',
-            icon: icons.PermIdentityIcon,
-            breadcrumbs: false
         }
     ]
 };

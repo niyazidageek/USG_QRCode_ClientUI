@@ -25,7 +25,7 @@ export default function BookOptions() {
     useGetData(ACTIVEBOOK, () => getActiveBook(jwt));
 
   if (error) {
-    alert.show(error.response.data);
+    alert.show(error.response.data.message);
   }
   return (
     <>

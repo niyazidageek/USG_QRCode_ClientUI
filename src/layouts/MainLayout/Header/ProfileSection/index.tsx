@@ -27,20 +27,16 @@ import {
   Typography,
 } from "@mui/material";
 
-// third-party
 import PerfectScrollbar from "react-perfect-scrollbar";
-
+import PasswordIcon from "@mui/icons-material/Password";
 import MainCard from "../../../../components/cards/MainCard";
 import Transitions from "../../../../components/extended/Transitions";
 import User1 from "../../../../assets/images/users/user-round.svg";
-
-// assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from "@tabler/icons";
 import { logOutAction } from "../../../../redux/actions/authActions";
 
-// ==============================|| PROFILE MENU ||============================== //
-
 const ProfileSection = () => {
+  const auth = useSelector((state: any) => state.authReducer);
   const theme: any = useTheme();
   const customization = useSelector((state: any) => state.customizationReducer);
   const navigate = useNavigate();
@@ -103,19 +99,19 @@ const ProfileSection = () => {
             lineHeight: 0,
           },
         }}
-        icon={
-          <Avatar
-            sx={{
-              ...theme.typography.mediumAvatar,
-              margin: "8px 0 8px 8px !important",
-              cursor: "pointer",
-            }}
-            ref={anchorRef}
-            aria-controls={open ? "menu-list-grow" : undefined}
-            aria-haspopup="true"
-            color="inherit"
-          />
-        }
+        // icon={
+        //   <Avatar
+        //     sx={{
+        //       ...theme.typography.mediumAvatar,
+        //       margin: "8px 0 8px 8px !important",
+        //       cursor: "pointer",
+        //     }}
+        //     ref={anchorRef}
+        //     aria-controls={open ? "menu-list-grow" : undefined}
+        //     aria-haspopup="true"
+        //     color="inherit"
+        //   />
+        // }
         label={
           <IconSettings
             stroke={1.5}
@@ -167,10 +163,12 @@ const ProfileSection = () => {
                           variant="h4"
                           sx={{ fontWeight: 400 }}
                         >
-                          Johne Doe
+                          {auth.name} {auth.surname}
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      <Typography variant="subtitle2">
+                        {auth.roles.join(",")}
+                      </Typography>
                     </Stack>
                   </Box>
                   <PerfectScrollbar
@@ -180,44 +178,7 @@ const ProfileSection = () => {
                       overflowX: "hidden",
                     }}
                   >
-                    <Box sx={{ p: 2 }}>
-                      <Divider />
-                      <Card
-                        sx={{
-                          bgcolor: theme.palette.primary.light,
-                          my: 2,
-                        }}
-                      >
-                        <CardContent>
-                          <Grid container spacing={3} direction="column">
-                            <Grid item>
-                              <Grid
-                                item
-                                container
-                                alignItems="center"
-                                justifyContent="space-between"
-                              >
-                                <Grid item>
-                                  <Typography variant="subtitle1">
-                                    Allow Notifications
-                                  </Typography>
-                                </Grid>
-                                <Grid item>
-                                  <Switch
-                                    checked={notification}
-                                    onChange={(e) =>
-                                      setNotification(e.target.checked)
-                                    }
-                                    name="sdm"
-                                    size="small"
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                      </Card>
-                      <Divider />
+                    <Box sx={{}}>
                       <List
                         component="nav"
                         sx={{
@@ -238,41 +199,13 @@ const ProfileSection = () => {
                           sx={{
                             borderRadius: `${customization.borderRadius}px`,
                           }}
-                          selected={selectedIndex === 0}
-                          onClick={(event) =>
-                            handleListItemClick(
-                              event,
-                              0,
-                              "/user/account-profile/profile1"
-                            )
-                          }
-                        >
-                          <ListItemIcon>
-                            <IconSettings stroke={1.5} size="1.3rem" />
-                          </ListItemIcon>
-                          <ListItemText
-                            primary={
-                              <Typography variant="body2">
-                                Account Settings
-                              </Typography>
-                            }
-                          />
-                        </ListItemButton>
-                        <ListItemButton
-                          sx={{
-                            borderRadius: `${customization.borderRadius}px`,
-                          }}
                           selected={selectedIndex === 1}
                           onClick={(event) =>
-                            handleListItemClick(
-                              event,
-                              1,
-                              "/user/social-profile/posts"
-                            )
+                            handleListItemClick(event, 1, "auth/resetpassword")
                           }
                         >
                           <ListItemIcon>
-                            <IconUser stroke={1.5} size="1.3rem" />
+                            <PasswordIcon />
                           </ListItemIcon>
                           <ListItemText
                             primary={
@@ -283,7 +216,7 @@ const ProfileSection = () => {
                               >
                                 <Grid item>
                                   <Typography variant="body2">
-                                    Social Profile
+                                    Reset password
                                   </Typography>
                                 </Grid>
                               </Grid>

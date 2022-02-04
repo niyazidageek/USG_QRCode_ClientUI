@@ -3,10 +3,10 @@ import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import AuthWrapper1 from '../AuthWrapper';
 import AuthCardWrapper from '../AuthCardWrapper';
-import AuthForgotPassword from '../auth-forms/AuthForgotPassword';
+import ResetPasswordForm from '../auth-forms/ResetPassword';
+import './a.scss'
 
-
-const ForgotPassword = () => {
+const ResetPassword = () => {
     const theme = useTheme();
     const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -32,7 +32,7 @@ const ForgotPassword = () => {
                                                         gutterBottom
                                                         variant={matchDownSM ? 'h3' : 'h2'}
                                                     >
-                                                        Forgot your password?
+                                                        Reset your password
                                                     </Typography>
                                                     <Typography
                                                         variant="caption"
@@ -46,8 +46,9 @@ const ForgotPassword = () => {
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <AuthForgotPassword />
+                                        <ResetPasswordForm />
                                     </Grid>
+                                    
                                 </Grid>
                             </AuthCardWrapper>
                         </Grid>
@@ -58,4 +59,4 @@ const ForgotPassword = () => {
     );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

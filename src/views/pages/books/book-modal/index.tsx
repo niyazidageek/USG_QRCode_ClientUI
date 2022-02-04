@@ -33,7 +33,7 @@ export default function AddBookModal() {
         setOpen(false);
       },
       onError: (err: any) => {
-        alert.show(err.response.data, {type:'error'})
+        alert.show(err.response.data.message, {type:'error'})
       },
     }
   );
