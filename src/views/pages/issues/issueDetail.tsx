@@ -42,7 +42,6 @@ import { useAlert } from "react-alert";
               <Card />
             ) : (
               <SubCard
-                style={{ minWidth: "400px" }}
                 title={`Information about issue #${data.id}`}
               >
                 <Typography fontWeight={"bold"} py={2}>

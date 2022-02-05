@@ -15,8 +15,9 @@ import { useNavigate } from "react-router-dom";
 import { deleteIssue } from "../../../../services/issueService";
 import { useSelector } from "react-redux";
 import { useAlert } from "react-alert";
+import { deleteClient } from "../../../../services/clientService";
 
-export default function DeleteAlert({ issueId }: any) {
+export default function DeleteAlert({ clientId }: any) {
   const [open, setOpen] = React.useState(false);
   const jwt = useSelector((state: any) => state.authReducer.jwt);
   const navigate = useNavigate();
@@ -30,10 +31,10 @@ export default function DeleteAlert({ issueId }: any) {
     setOpen(false);
   };
 
-  const { mutate, isLoading, isError } = useMutation((id)=>deleteIssue(id, jwt), {
+  const { mutate, isLoading, isError } = useMutation((id)=>deleteClient(id, jwt), {
     onSuccess: (data: any) => {
       alert.show(data.data.message, {type:'success'})
-      navigate("/issues");
+      navigate("/clients");
     },
     onError: (err: any) => {
       alert.show(err.response.data.message, {type:'error'})
@@ -41,7 +42,7 @@ export default function DeleteAlert({ issueId }: any) {
   });
 
   function handleClick() {
-    mutate(issueId);
+    mutate(clientId);
   }
 
   return (

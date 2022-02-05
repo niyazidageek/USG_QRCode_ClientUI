@@ -24,7 +24,6 @@ export function useWebSocket(listenerMethod:string, callback:any) {
       connection
         .start()
         .then((result:any) => {
-          console.log("Connected!");
           connection.on(listenerMethod,()=>callback());
         })
         .catch((e:any) => console.log("Connection failed: ", e));

@@ -45,7 +45,6 @@ function ClientPage() {
                 <Card />
               ) : (
                 <SubCard
-                  style={{ minWidth: "400px" }}
                   title={`Information about client #${data.id}`}
                 >
                   <Typography fontWeight={"bold"} py={2}>

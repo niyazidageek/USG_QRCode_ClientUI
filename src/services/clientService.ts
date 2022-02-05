@@ -31,3 +31,11 @@ export const getClientById = (id: any, jwt: any) => {
     },
   });
 };
+
+export const deleteClient = (id: any, jwt:any) => {
+  return httpClient.delete(`client/deleteclient/${id}`,{
+    headers:{
+      Authorization:`Bearer ${jwt}`
+    }
+  });
+};

@@ -87,7 +87,7 @@ function Row(props: any) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Typography>
+            <Typography style={{lineHeight:'30px'}}>
               <h1>Url: {row.url}</h1>
             </Typography>
           </Collapse>

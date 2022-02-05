@@ -43,7 +43,6 @@ function ScanPage() {
             <Card />
           ) : (
             <SubCard
-              style={{ minWidth: "400px" }}
               title={`Information about scan #${data.id}`}
             >
               <Typography fontWeight={"bold"} py={2}>

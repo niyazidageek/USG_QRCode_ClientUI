@@ -47,7 +47,6 @@ function BooksPage() {
             <Card />
           ) : (
             <SubCard
-              style={{ minWidth: "400px" }}
               title={`Information about book #${data.id}`}
             >
               <Typography fontWeight={"bold"} py={2}>
@@ -64,6 +63,8 @@ function BooksPage() {
                 Url:{" "}
                 <Typography display={"inline-block"}>
                   <Link
+                  style={{wordBreak:'break-all'}}
+                  textAlign={'inherit'}
                     underline="none"
                     onClick={() => {
                       window.open(data.url, "_blank");
